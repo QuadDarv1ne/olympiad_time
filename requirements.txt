@@ -1,0 +1,4 @@
+flask_migrate
+Flask
+Flask-SQLAlchemy
+WTForms
