@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="error-page">
+            <h1>404</h1>
+            <p>Извините, страница не найдена.</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">На главную</a>
+        </div>
+    </div>
+
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+
+        .error-page h1 {
+            font-size: 120px;
+            margin: 0;
+            color: #dc3545;
+        }
+
+        .error-page p {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #6c757d;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</body>
+</html>

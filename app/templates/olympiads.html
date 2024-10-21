@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Доступные олимпиады{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Доступные олимпиады</h2>
+    <ul class="list-group">
+        {% for olympiad in olympiads %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ olympiad.name }} - {{ olympiad.date.strftime('%d.%m.%Y') }}
+                <a href="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" class="btn btn-primary">Записаться</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

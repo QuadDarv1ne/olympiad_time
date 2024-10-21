@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Регистрация студента</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", placeholder="Имя") }}
+            {% for error in form.name.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.surname.label(class="form-label") }}
+            {{ form.surname(class="form-control", placeholder="Фамилия") }}
+            {% for error in form.surname.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.patronymic.label(class="form-label") }}
+            {{ form.patronymic(class="form-control", placeholder="Отчество") }}
+            {% for error in form.patronymic.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.grade.label(class="form-label") }}
+            {{ form.grade(class="form-control", placeholder="Класс") }}
+            {% for error in form.grade.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", placeholder="Email") }}
+            {% for error in form.email.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.phone.label(class="form-label") }}
+            {{ form.phone(class="form-control", placeholder="Телефон") }}
+            {% for error in form.phone.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </div>
+    </form>
+    <p class="text-center">Уже зарегистрированы? <a href="{{ url_for('login') }}">Войти</a></p>
+</div>
+{% endblock %}
