@@ -3,14 +3,21 @@ body {
 }
 
 nav {
-    margin-bottom: 20px;
+    background-color: #333;
+    padding: 1em;
+    color: white;
+}
+
+nav a {
+    color: white;
+    margin-right: 10px;
+    text-decoration: none;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
+    margin: 20px;
 }
 
-h1, h2 {
+h2 {
     color: #333;
 }

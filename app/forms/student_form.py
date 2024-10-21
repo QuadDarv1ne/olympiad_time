@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, NumberRange
-
+    
 class StudentForm(FlaskForm):
     name = StringField('Имя', validators=[DataRequired(), Length(min=2, max=30)])
     surname = StringField('Фамилия', validators=[DataRequired(), Length(min=2, max=30)])

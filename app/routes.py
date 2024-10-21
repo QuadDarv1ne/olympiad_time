@@ -1,10 +1,9 @@
 from flask import render_template, redirect, url_for, flash, request, session
-from app.forms.student_form import StudentForm, LoginForm
-from app.models.student import Student
-from app.models.student import Olympiad
-from app.models.student import Registration
+from app.forms import StudentForm, LoginForm, RegistrationForm
+from app.models import Student, Olympiad, Registration
 from app.extensions import db
 from werkzeug.exceptions import abort
+from flask_login import login_user, logout_user, login_required, current_user
 
 def init_routes(app):
     
@@ -40,12 +39,18 @@ def init_routes(app):
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data).first()
             if user and user.check_password(form.password.data):
-                session['student_id'] = user.id
+                login_user(user)
                 flash('Вы успешно вошли в систему!', 'success')
                 return redirect(url_for('index'))
             else:
                 flash('Неправильное имя пользователя или пароль', 'danger')
         return render_template('login.html', form=form)
+
+    @app.route('/logout')
+    def logout():
+        logout_user()
+        flash('Вы вышли из системы.', 'success')
+        return redirect(url_for('index'))
 
     @app.errorhandler(404)
     def page_not_found(e):
@@ -62,19 +67,27 @@ def init_routes(app):
         return render_template('olympiads.html', olympiads=olympiads)
 
     @app.route('/register_olympiad/<int:olympiad_id>')
+    @login_required
     def register_olympiad(olympiad_id):
-        student_id = session.get('student_id')
-        if student_id is None:
-            flash('Пожалуйста, войдите в систему, чтобы записаться на олимпиаду.', 'danger')
-            return redirect(url_for('login'))
-
+        student_id = current_user.id  # Используем информацию о текущем пользователе
         registration = Registration(student_id=student_id, olympiad_id=olympiad_id)
         db.session.add(registration)
         db.session.commit()
-        flash('Вы успешно записаны на олимпиаду!', 'success')
+        flash('Вы успешно записаны на олимпиаду', 'success')
         return redirect(url_for('olympiads'))
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
-        # Логика для обработки регистрации
-        return render_template('register.html')
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            existing_student = Student.query.filter_by(username=form.username.data).first()
+            if existing_student:
+                flash('Пользователь с таким именем уже существует!', 'danger')
+            else:
+                student = Student(username=form.username.data, email=form.email.data)
+                student.set_password(form.password.data)  # Предполагается наличие метода set_password
+                db.session.add(student)
+                db.session.commit()
+                flash('Успешная регистрация. Теперь вы можете войти в систему.', 'success')
+                return redirect(url_for('login'))
+        return render_template('register.html', form=form)
