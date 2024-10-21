@@ -50,6 +50,11 @@ olympiad_time/
 python run.py
 ```
 
+Работа с проектом
+```
+git init
+git push origin master
+```
 
 
 **Дата:** 20.10.2024
