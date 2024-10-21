@@ -5,3 +5,8 @@ WTForms
 python-multipart
 Flask-Mail
 werkzeug
+Flask-Limiter
+flask-bcrypt
+flask-login
+flask-mailflask-limiter
+

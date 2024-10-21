@@ -5,9 +5,9 @@ class Student(db.Model):
     name = db.Column(db.String(30), nullable=False)
     surname = db.Column(db.String(30), nullable=False)
     patronymic = db.Column(db.String(30), nullable=True)
-    grade = db.Column(db.String(10), nullable=False)  # Класс
+    grade = db.Column(db.String(10), nullable=False) # Класс
     email = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(15), nullable=True)  # Телефон
+    phone = db.Column(db.String(15), nullable=True) # Телефон
     score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
