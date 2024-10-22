@@ -18,8 +18,8 @@ def create_app():
     migrate.init_app(app, db)
 
     # Создание таблиц, если их нет (для разработки)
-    with app.app_context():
-        db.create_all()  
+    # with app.app_context():
+    #     db.create_all()  
     
     # Инициализация Flask-Login
     login_manager.init_app(app)

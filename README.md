@@ -1,5 +1,11 @@
 ## Сайт для проведения олимпиад - Время Олимпиад
 
+![index](app/static/images/index.png)
+![olimpiads](app/static/images/olimpiads.png)
+
+![auth](app/static/images/auth.png)
+![register](app/static/images/register.png)
+
 ```
 olympiad_time/
 │
@@ -50,16 +56,17 @@ olympiad_time/
 └── requirements.txt           # Зависимости проекта
 ```
 
-Запуск проекта
+### Запуск проекта
 ```
 python run.py
 ```
 
-Работа с проектом
+### Работа с проектом
 ```
 git init
 git push origin master
 ```
+
 
 
 **Дата:** 20.10.2024
