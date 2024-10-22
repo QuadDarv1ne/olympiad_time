@@ -1,23 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Вход{% endblock %}
+{% block title %}Авторизация{% endblock %}
 {% block content %}
-    <h2>Вход</h2>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.username.label }} {{ form.username(size=32) }}
-            {% for error in form.username.errors %}
-                <span style="color:red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.password.label }} {{ form.password(size=32) }}
-            {% for error in form.password.errors %}
-                <span style="color:red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
+    <div class="container mt-5">
+        <h2 class="text-center">Авторизация</h2>
+        <form method="POST" class="mt-4">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control", size=32) }}
+                {% for error in form.username.errors %}
+                    <div class="text-danger mt-1">[{{ error }}]</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", size=32) }}
+                {% for error in form.password.errors %}
+                    <div class="text-danger mt-1">[{{ error }}]</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3 text-center">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+            <div class="text-center">
+                <p>Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a></p>
+            </div>
+        </form>
+    </div>
 {% endblock %}

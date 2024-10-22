@@ -5,50 +5,81 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center mb-4">Регистрация студента</h2>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+        
         <div class="mb-3">
             {{ form.name.label(class="form-label") }}
-            {{ form.name(class="form-control", placeholder="Имя") }}
+            {{ form.name(class="form-control", placeholder="Ваше имя") }}
             {% for error in form.name.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
         <div class="mb-3">
             {{ form.surname.label(class="form-label") }}
-            {{ form.surname(class="form-control", placeholder="Фамилия") }}
+            {{ form.surname(class="form-control", placeholder="Ваша фамилия") }}
             {% for error in form.surname.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
         <div class="mb-3">
             {{ form.patronymic.label(class="form-label") }}
-            {{ form.patronymic(class="form-control", placeholder="Отчество") }}
+            {{ form.patronymic(class="form-control", placeholder="Ваше отчество") }}
             {% for error in form.patronymic.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
         <div class="mb-3">
             {{ form.grade.label(class="form-label") }}
-            {{ form.grade(class="form-control", placeholder="Класс") }}
+            {{ form.grade(class="form-control", placeholder="Ваш класс") }}
             {% for error in form.grade.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
         <div class="mb-3">
             {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control", placeholder="Email") }}
+            {{ form.email(class="form-control", placeholder="Ваш email") }}
             {% for error in form.email.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
         <div class="mb-3">
             {{ form.phone.label(class="form-label") }}
-            {{ form.phone(class="form-control", placeholder="Телефон") }}
+            {{ form.phone(class="form-control", placeholder="Ваш телефон") }}
             {% for error in form.phone.errors %}
             <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>
+
+        <div class="mb-3">
+            {{ form.photo.label(class="form-label") }}
+            {{ form.photo(class="form-control") }}
+            {% for error in form.photo.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="Введите пароль") }}
+            {% for error in form.password.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(class="form-control", placeholder="Подтвердите пароль") }}
+            {% for error in form.confirm_password.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
         <div class="mb-3">
             {{ form.submit(class="btn btn-primary w-100") }}
         </div>

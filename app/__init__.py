@@ -1,10 +1,11 @@
 from flask import Flask
 from flask_login import LoginManager
-from app.extensions import db, migrate
+from app.extensions import db, migrate, login_manager
 from app.routes import init_routes
 from config import Config
 import logging
 from logging.handlers import RotatingFileHandler
+from flask_migrate import Migrate
 
 # Инициализация LoginManager
 login_manager = LoginManager()
