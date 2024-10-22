@@ -1,11 +1,10 @@
 from flask import Flask
 from flask_login import LoginManager
-from app.extensions import db, migrate, login_manager
+from app.extensions import db, migrate
 from app.routes import init_routes
 from config import Config
 import logging
 from logging.handlers import RotatingFileHandler
-from flask_migrate import Migrate
 
 # Инициализация LoginManager
 login_manager = LoginManager()
@@ -18,6 +17,10 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Создание таблиц, если их нет (для разработки)
+    with app.app_context():
+        db.create_all()  
+    
     # Инициализация Flask-Login
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
@@ -41,3 +44,6 @@ def setup_logging(app):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
+    
+    # Логирование ошибок
+    app.logger.info("Logging is set up.")

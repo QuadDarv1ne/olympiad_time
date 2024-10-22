@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm
-from app.models import Student
+from app.models import Student, User
 from app.extensions import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -39,7 +39,7 @@ def init_routes(app):
 
         form = LoginForm()
         if form.validate_on_submit():
-            user = Student.query.filter_by(username=form.username.data).first()
+            user = User.query.filter_by(username=form.username.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
                 flash('Вы успешно вошли в систему!', 'success')
@@ -50,6 +50,7 @@ def init_routes(app):
 
         return render_template('login.html', form=form)
 
+
     # Страница регистрации
     @app.route('/register', methods=['GET', 'POST'])
     def register():
@@ -59,8 +60,9 @@ def init_routes(app):
 
         form = RegistrationForm()
         if form.validate_on_submit():
-            existing_user = Student.query.filter((Student.username == form.username.data) | 
-                                                (Student.email == form.email.data)).first()
+            # Проверка на существующего пользователя
+            existing_user = User.query.filter((User.username == form.username.data) | 
+                                            (User.email == form.email.data)).first()
 
             if existing_user:
                 flash('Пользователь с таким именем или email уже существует.', 'danger')
@@ -78,11 +80,16 @@ def init_routes(app):
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))  # Сохранение файла в папку
 
                 # Создание нового пользователя
-                new_user = Student(username=form.username.data, email=form.email.data)
-                new_user.set_password(form.password.data)
+                new_user = User(
+                    username=form.username.data,
+                    email=form.email.data,
+                    role='student'  # Установка роли пользователя по умолчанию
+                )
+                new_user.set_password(form.password.data)  # Хеширование пароля
                 new_user.photo = filename  # Сохранение имени файла
-                db.session.add(new_user)
-                db.session.commit()
+
+                db.session.add(new_user)  # Добавление нового пользователя в сессию
+                db.session.commit()  # Сохранение изменений в базе данных
 
                 flash('Регистрация прошла успешно. Теперь вы можете войти в систему.', 'success')
                 return redirect(url_for('login'))
@@ -90,7 +97,6 @@ def init_routes(app):
                 flash('Недопустимый файл. Пожалуйста, загрузите изображение формата PNG, JPG или GIF.', 'danger')
 
         return render_template('register.html', form=form)
-
 
     # Выход из системы
     @app.route('/logout')
@@ -112,6 +118,19 @@ def init_routes(app):
         return render_template('404.html'), 404
     
     @app.route('/register_olympiad/<int:olympiad_id>', methods=['GET', 'POST'])
+    @login_required
     def register_olympiad(olympiad_id):
-        # Ваша логика регистрации олимпиады
-        return render_template('register.html', olympiad_id=olympiad_id)
+        olympiads = load_olympiads()
+        olympiad = next((o for o in olympiads if o['id'] == olympiad_id), None)
+
+        if olympiad is None:
+            flash('Олимпиада не найдена.', 'danger')
+            return redirect(url_for('olympiads'))
+
+        if request.method == 'POST':
+            # Логика для регистрации на олимпиаду (например, создание связи между пользователем и олимпиадой в БД)
+            flash('Вы успешно зарегистрировались на олимпиаду!', 'success')
+            return redirect(url_for('olympiads'))
+
+        return render_template('register_olympiad.html', olympiad=olympiad)
+

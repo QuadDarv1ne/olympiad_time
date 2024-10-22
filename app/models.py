@@ -2,6 +2,9 @@ from app.extensions import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 # Модель пользователя (User)
 class User(db.Model, UserMixin):
@@ -13,6 +16,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(50), nullable=False, default='student')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    photo = db.Column(db.String(256), nullable=True)
 
     # Метод для хеширования пароля
     def set_password(self, password):

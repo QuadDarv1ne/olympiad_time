@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your_secret_key'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/olympiad_time.db.db'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret_key'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/olympiad_time.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
