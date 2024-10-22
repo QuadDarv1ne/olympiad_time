@@ -2,8 +2,6 @@ __pycache__/
 *.pyc
 instance/
 *.db
-env/
 
 .idea
 venv
-.env
