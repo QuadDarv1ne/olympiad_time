@@ -4,8 +4,8 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm
-from app.models import Student, User
-from app.extensions import db
+from app.db.models import Student, User
+from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
 
 def allowed_file(filename):
