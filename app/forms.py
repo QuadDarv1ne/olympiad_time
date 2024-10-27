@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
+from wtforms import DateField, EmailField, StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 class RegistrationForm(FlaskForm):
@@ -40,3 +40,11 @@ class EditProfileForm(FlaskForm):
     bio = TextAreaField('Биография')
     photo = FileField('Фотография')  # Сделано необязательным для редактирования
     submit = SubmitField('Сохранить изменения')
+
+class OlympiadRegistrationForm(FlaskForm):
+    title = StringField('Название Олимпиады', validators=[DataRequired()])
+    date = DateField('Дата Олимпиады', format='%Y-%m-%d', validators=[DataRequired()])
+    description = TextAreaField('Описание', validators=[DataRequired()])
+    image = FileField('Изображение', validators=[DataRequired()])
+    submit = SubmitField('Зарегистрировать Олимпиаду')
+    

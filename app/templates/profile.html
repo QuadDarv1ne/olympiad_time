@@ -3,48 +3,83 @@
 {% block title %}Профиль студента{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card profile-card shadow-lg text-center text-white" 
-         style="background-image: url('/static/images/trophy-background.jpg'); background-size: cover; border-radius: 15px;">
-        <div class="card-body p-5">
+<div class="container mt-5 d-flex align-items-start">
 
+    <!-- Изображение трофея -->
+    <div class="trophy-image me-3" style="width: 200px;">
+        <img src="/static/images/trophy.jpeg" alt="Trophy" class="img-fluid" style="border-radius: 15px;">
+    </div>
+
+    <div class="card profile-card shadow-lg text-white"
+         style="background: rgba(145, 77, 255, 0.5); border-radius: 15px; max-width: 500px;">
+        <div class="card-body p-4">
+        
             <!-- Фото профиля -->
-            <div class="profile-image mb-3">
-                <img src="{{ url_for('static', filename='images/profile_pics/' + student.photo) }}" 
-                     class="img-fluid rounded-circle border border-3 border-light" 
-                     alt="Profile Picture" 
-                     style="width: 150px; height: 150px; object-fit: cover;">
-
+            <div class="profile-image mb-3 text-center">
+                {% if student.photo %}
+                    <img src="{{ url_for('static', filename='images/profile_pics/' + student.photo) }}"
+                         class="img-fluid rounded-circle border border-3 border-light"
+                         alt="Profile Picture"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/profile_pics/super-cat.jpg') }}"
+                         class="img-fluid rounded-circle border border-3 border-light"
+                         alt="Default Profile Picture"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                {% endif %}
             </div>
 
             <!-- Имя и основные данные -->
-            <h2 class="card-title">{{ student.student_name }} {{ student.student_surname }} {{ student.student_patronymic }}</h2>
-            <p class="text-light">{{ student.grade }} класс</p>
+            <h2 class="card-title text-center" style="color: #ff6b6b; background: linear-gradient(90deg, #4300fc, #5c16ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                {{ student.student_name }} {{ student.student_surname }} {{ student.student_patronymic }}
+            </h2>
+            <p class="text-center" style="color: #5c20ff;box-shadow: #ff6b6b;">{{ student.grade }} класс</p>
 
             <!-- Контактная информация и успеваемость -->
             <div class="profile-info d-flex justify-content-center mt-4">
-                <div class="info-block p-3 rounded" style="background: rgba(255, 255, 255, 0.2);">
+                <div class="info-block p-3 rounded" style="background: rgba(255, 255, 255, 0.3);">
                     <p class="mb-1"><i class="fas fa-envelope text-warning"></i> {{ student.email }}</p>
                     <p class="mb-1"><i class="fas fa-phone text-warning"></i> {{ student.phone_number }}</p>
                     <p class="mb-1"><i class="fas fa-star text-warning"></i> Оценка: {{ student.score }}</p>
                 </div>
             </div>
 
-            <!-- Кнопка записи на олимпиады -->
-            <a href="{{ url_for('olympiads') }}" class="btn btn-secondary mt-4 rounded-pill">
-                Записаться на олимпиады
-            </a>
-
-            <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary mt-4 rounded-pill">Редактировать профиль</a>
+            <!-- Кнопки записи на олимпиады и редактирования профиля -->
+            <div class="d-flex flex-column align-items-center mt-4">
+                <a href="{{ url_for('olympiads') }}" class="btn btn-success mt-2 rounded-pill shadow-sm">
+                    Записаться на олимпиады
+                </a>
+                <a href="{{ url_for('edit_profile') }}" class="btn btn-info mt-2 rounded-pill shadow-sm">Редактировать профиль</a>
+                <a href="javascript:history.back()" class="btn btn-light mt-2 rounded-pill shadow-sm">Назад</a>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.onload = function() {
+        const currentUrl = window.location.href;
+        const previousUrl = localStorage.getItem('previousUrl');
+        if (!previousUrl || previousUrl !== currentUrl) {
+            localStorage.setItem('previousUrl', currentUrl);
+        }
+    
+        document.getElementById('backButton').onclick = function() {
+            const previousUrl = localStorage.getItem('previousUrl');
+            if (previousUrl) {
+                window.location.href = previousUrl;
+            } else {
+                window.history.back();
+            }
+        };
+    };
+</script>
 
 <!-- Стили для улучшения внешнего вида карточки профиля -->
 <style>
     .profile-card {
         max-width: 500px;
-        margin: 0 auto;
+        margin-left: 20px; /* Отступ для карточки */
     }
     .info-block {
         color: #4949fa; /* Цвет текста информации */
@@ -53,6 +88,12 @@
     }
     .profile-info i {
         margin-right: 10px; /* Отступ между иконкой и текстом */
+    }
+    .btn {
+        transition: background-color 0.3s ease, transform 0.3s ease; /* Плавный переход */
+    }
+    .btn:hover {
+        transform: scale(1.05); /* Увеличение кнопки при наведении */
     }
 </style>
 {% endblock %}

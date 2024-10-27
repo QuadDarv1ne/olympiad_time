@@ -60,9 +60,34 @@
             {{ form.bio(class="form-control", rows=3) }}
         </div>
 
-        <div class="text-center">
-            {{ form.submit(class="btn btn-primary") }}
+        <!-- Контейнер для кнопок -->
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+            <div>
+                <a href="javascript:history.back()" class="btn btn-light shadow-sm">Назад</a>
+            </div>
         </div>
     </form>
 </div>
+
+<script>
+    window.onload = function() {
+        const currentUrl = window.location.href;
+        const previousUrl = localStorage.getItem('previousUrl');
+        if (!previousUrl || previousUrl !== currentUrl) {
+            localStorage.setItem('previousUrl', currentUrl);
+        }
+
+        document.getElementById('backButton').onclick = function() {
+            const previousUrl = localStorage.getItem('previousUrl');
+            if (previousUrl) {
+                window.location.href = previousUrl;
+            } else {
+                window.history.back();
+            }
+        };
+    };
+</script>
 {% endblock %}

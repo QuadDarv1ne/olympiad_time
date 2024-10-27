@@ -3,8 +3,8 @@ import os
 from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.db.models import Student, User
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, OlympiadRegistrationForm
+from app.db.models import OlympiadRegistration, Student, User, Olympiad
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -24,7 +24,7 @@ def load_olympiads(filepath='olympiads.json'):
 def init_routes(app):
     # Настройки для загрузки файлов
     app.config['UPLOAD_FOLDER'] = 'static/images/'
-    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Допустимые форматы файлов
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
     # Главная страница
     @app.route('/')
@@ -70,6 +70,8 @@ def init_routes(app):
             file = request.files['photo']
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
+                # Создаем уникальное имя файла
+                filename = f"{current_user.id}_{filename}"
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
                 new_user = User(email=form.email.data, role='student')
@@ -114,12 +116,24 @@ def init_routes(app):
             flash('Олимпиада не найдена.', 'danger')
             return redirect(url_for('olympiads'))
 
-        if request.method == 'POST':
-            # Логика для регистрации на олимпиаду (например, создание связи между пользователем и олимпиадой в БД)
+        form = OlympiadRegistrationForm()
+
+        if form.validate_on_submit():
+            # Проверка, зарегистрирован ли уже пользователь на олимпиаду
+            registration = OlympiadRegistration.query.filter_by(student_id=current_user.id, olympiad_id=olympiad_id).first()
+            if registration:
+                flash('Вы уже зарегистрированы на эту олимпиаду!', 'warning')
+                return redirect(url_for('olympiads'))
+
+            # Создание новой регистрации
+            new_registration = OlympiadRegistration(student_id=current_user.id, olympiad_id=olympiad_id)
+            db.session.add(new_registration)
+            db.session.commit()
+
             flash('Вы успешно зарегистрировались на олимпиаду!', 'success')
             return redirect(url_for('olympiads'))
 
-        return render_template('register_olympiad.html', olympiad=olympiad)
+        return render_template('register_olympiad.html', olympiad=olympiad, form=form)
 
     @app.route('/profile/<int:student_id>')
     @login_required
@@ -133,10 +147,25 @@ def init_routes(app):
     @app.route('/profile/edit', methods=['GET', 'POST'])
     @login_required
     def edit_profile():
-        form = EditProfileForm()  # Инициализация формы
+        form = EditProfileForm()
         if form.validate_on_submit():
-            # Логика для обработки формы
-            flash('Профиль успешно обновлен!')
-            return redirect(url_for('profile'))  # Перенаправление после успешного обновления
+            # Обновление профиля пользователя
+            current_user.email = form.email.data
+            if 'photo' in request.files:
+                file = request.files['photo']
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    filename = f"{current_user.id}_{filename}"  # Уникальное имя файла
+                    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                    current_user.photo = filename
 
-        return render_template('edit_profile.html', form=form)  # Передача формы в шаблон
+            db.session.commit()
+            flash('Профиль успешно обновлен!', 'success')
+            return redirect(url_for('profile', student_id=current_user.id))
+
+        return render_template('edit_profile.html', form=form)
+
+    @app.route('/olympiads/list')
+    def olympiads_list():
+        olympiads = Olympiad.query.all()  # Получаем все олимпиады
+        return render_template('olympiads_list.html', olympiads=olympiads)

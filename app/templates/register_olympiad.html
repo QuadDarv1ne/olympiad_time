@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация Олимпиады{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Регистрация Олимпиады</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Название Олимпиады</label>
+            {{ form.title(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="date" class="form-label">Дата Олимпиады</label>
+            {{ form.date(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Описание</label>
+            {{ form.description(class="form-control", rows=4) }}
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Изображение</label>
+            {{ form.image(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зарегистрировать Олимпиаду</button>
+    </form>
+</div>
+{% endblock %}

@@ -9,7 +9,7 @@
         {% for olympiad in olympiads %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ olympiad.name }} - {{ olympiad.date.strftime('%d.%m.%Y') }}
-                <a href="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" class="btn btn-primary">Записаться</a>
+                <a href="{{ url_for('olympiads_list', olympiad_id=olympiad.id) }}" class="btn btn-primary">Записаться</a>
             </li>
         {% endfor %}
     </ul>

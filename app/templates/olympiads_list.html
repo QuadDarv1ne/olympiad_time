@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Список Олимпиад{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Доступные Олимпиады</h1>
+    <ul class="list-group">
+        {% for olympiad in olympiads %}
+        <li class="list-group-item">
+            <h5>{{ olympiad.title }}</h5>
+            <p>Дата: {{ olympiad.date }}</p>
+            <p>{{ olympiad.description }}</p>
+            <a href="{{ url_for('register_for_olympiad', olympiad_id=olympiad.id) }}" class="btn btn-primary">Записаться</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

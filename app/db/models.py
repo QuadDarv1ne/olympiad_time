@@ -66,3 +66,21 @@ class Student(db.Model):
     # Представление объекта для отладки
     def __repr__(self):
         return f'<Student {self.student_name} {self.student_surname}>'
+
+class OlympiadRegistration(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Связь с пользователем
+    olympiad_id = db.Column(db.Integer, db.ForeignKey('olympiad.id'), nullable=False)  # Связь с олимпиадой
+
+    student = db.relationship('User', backref='registrations')
+    olympiad = db.relationship('Olympiad', backref='registrations')
+
+class Olympiad(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+    description = db.Column(db.Text)
+
+    def __repr__(self):
+        return f'<Olympiad {self.name}>'
+    
