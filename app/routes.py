@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm
 from app.db.models import Student, User
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -129,3 +129,14 @@ def init_routes(app):
             flash('Студент не найден', 'danger')
             return redirect(url_for('index'))
         return render_template('profile.html', student=student)
+
+    @app.route('/profile/edit', methods=['GET', 'POST'])
+    @login_required
+    def edit_profile():
+        form = EditProfileForm()  # Инициализация формы
+        if form.validate_on_submit():
+            # Логика для обработки формы
+            flash('Профиль успешно обновлен!')
+            return redirect(url_for('profile'))  # Перенаправление после успешного обновления
+
+        return render_template('edit_profile.html', form=form)  # Передача формы в шаблон

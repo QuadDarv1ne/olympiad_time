@@ -33,15 +33,15 @@ def populate_db():
 
         # Создание студентов
         students = [
-            Student(student_name='Иван', student_last_name='Иванов', student_patronymic='Иванович',
+            Student(student_name='Иван', student_surname='Иванов', student_patronymic='Иванович',
                     grade='10', email='ivan@example.com', phone_number='89001234567',
-                    photo='static/images/profile_pics/super-cat.jpg', user_id=users[0].id),
-            Student(student_name='Мария', student_last_name='Петрова', student_patronymic='Сергеевна',
+                    photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 1", user_id=users[0].id),
+            Student(student_name='Мария', student_surname='Петрова', student_patronymic='Сергеевна',
                     grade='11', email='maria@example.com', phone_number='89007654321',
-                    photo='static/images/profile_pics/super-cat.jpg', user_id=users[1].id),
-            Student(student_name='Алексей', student_last_name='Сидоров', student_patronymic='Александрович',
+                    photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 2", user_id=users[1].id),
+            Student(student_name='Алексей', student_surname='Сидоров', student_patronymic='Александрович',
                     grade='9', email='alexey@example.com', phone_number='89009876543',
-                    photo='static/images/profile_pics/super-cat.jpg', user_id=users[2].id),
+                    photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 3", user_id=users[2].id),
         ]
         
         # Добавление студентов в сессию

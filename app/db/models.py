@@ -51,12 +51,13 @@ class Student(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     student_name = db.Column(db.String(150), nullable=False)                   # Имя студента
-    student_last_name = db.Column(db.String(150), nullable=False)              # Фамилия студента
+    student_surname = db.Column(db.String(150), nullable=False)                # Фамилия студента
     student_patronymic = db.Column(db.String(150), nullable=True)              # Отчество студента
     grade = db.Column(db.String(50), nullable=True)                            # Класс студента
     email = db.Column(db.String(150), unique=True, nullable=False, index=True) # Электронная почта
     phone_number = db.Column(db.String(20), nullable=True)                     # Номер телефона студента
     photo = db.Column(db.String(256), nullable=True)                           # Фото студента
+    bio = db.Column(db.String(256), nullable=True)                             # Биография студента
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Внешний ключ на пользователя
 
     # Связь с пользователем
@@ -64,4 +65,4 @@ class Student(db.Model):
 
     # Представление объекта для отладки
     def __repr__(self):
-        return f'<Student {self.student_name} {self.student_last_name}>'
+        return f'<Student {self.student_name} {self.student_surname}>'
