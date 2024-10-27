@@ -133,4 +133,3 @@ def init_routes(app):
             return redirect(url_for('olympiads'))
 
         return render_template('register_olympiad.html', olympiad=olympiad)
-
