@@ -4,16 +4,52 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card" style="background-image: url('/static/images/trophy-background.jpg'); background-size: cover; color: white;">
-        <div class="card-body text-center">
+    <div class="card profile-card shadow-lg text-center text-white" 
+         style="background-image: url('/static/images/trophy-background.jpg'); background-size: cover; border-radius: 15px;">
+        <div class="card-body p-5">
+
+            <!-- Фото профиля -->
+            <div class="profile-image mb-3">
+                <img src="{{ url_for('static', filename='images/profile_pics/profile.jpg') }}" 
+                     class="img-fluid rounded-circle border border-3 border-light" 
+                     alt="Profile Picture" 
+                     style="width: 150px; height: 150px; object-fit: cover;">
+            </div>
+
+            <!-- Имя и основные данные -->
             <h2 class="card-title">{{ student.name }} {{ student.surname }} {{ student.patronymic }}</h2>
-            <img src="{{ url_for('static', filename='profile_pics/' + student.username + '/profile.jpg') }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
-            <p>Класс: {{ student.grade }}</p>
-            <p>Email: {{ student.email }}</p>
-            <p>Телефон: {{ student.phone }}</p>
-            <p>Оценка: {{ student.score }}</p>
-            <a href="{{ url_for('olympiads') }}" class="btn btn-light">Записаться на олимпиады</a>
+            <p class="text-light">{{ student.grade }} класс</p>
+
+            <!-- Контактная информация и успеваемость -->
+            <div class="profile-info d-flex justify-content-center mt-4">
+                <div class="info-block p-3 rounded" style="background: rgba(255, 255, 255, 0.2);">
+                    <p class="mb-1"><i class="fas fa-envelope text-warning"></i> {{ student.email }}</p>
+                    <p class="mb-1"><i class="fas fa-phone text-warning"></i> {{ student.phone }}</p>
+                    <p class="mb-1"><i class="fas fa-star text-warning"></i> Оценка: {{ student.score }}</p>
+                </div>
+            </div>
+
+            <!-- Кнопка записи на олимпиады -->
+            <a href="{{ url_for('olympiads') }}" class="btn btn-outline-light mt-4 px-4 py-2 rounded-pill">
+                Записаться на олимпиады
+            </a>
         </div>
     </div>
 </div>
+
+<!-- Стили для улучшения внешнего вида карточки профиля -->
+<style>
+    .profile-card {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .info-block {
+        color: #4949fa; /* Цвет текста информации */
+        font-size: 1rem; /* Стандартный размер шрифта */
+        text-align: left; /* Выровнено по левому краю */
+    }
+    .profile-info i {
+        margin-right: 10px; /* Отступ между иконкой и текстом */
+    }
+</style>
 {% endblock %}
