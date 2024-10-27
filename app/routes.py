@@ -7,9 +7,10 @@ from app.forms import LoginForm, RegistrationForm
 from app.db.models import Student, User
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
+import config
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+# def allowed_file(filename):
+#     return '.' in filename and filename.rsplit('.', 1)[1].lower() in config['ALLOWED_EXTENSIONS']
 
 # Загрузка данных из JSON-файла
 def load_olympiads():
@@ -39,7 +40,8 @@ def init_routes(app):
 
         form = LoginForm()
         if form.validate_on_submit():
-            user = User.query.filter_by(username=form.username.data).first()
+            # Измените здесь на фильтрацию по email
+            user = User.query.filter_by(email=form.username.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
                 flash('Вы успешно вошли в систему!', 'success')
@@ -49,7 +51,6 @@ def init_routes(app):
                 flash('Неправильное имя пользователя или пароль', 'danger')
 
         return render_template('login.html', form=form)
-
 
     # Страница регистрации
     @app.route('/register', methods=['GET', 'POST'])
@@ -61,11 +62,10 @@ def init_routes(app):
         form = RegistrationForm()
         if form.validate_on_submit():
             # Проверка на существующего пользователя
-            existing_user = User.query.filter((User.username == form.username.data) | 
-                                            (User.email == form.email.data)).first()
+            existing_user = User.query.filter((User.email == form.email.data)).first()  # Удалите username
 
             if existing_user:
-                flash('Пользователь с таким именем или email уже существует.', 'danger')
+                flash('Пользователь с таким email уже существует.', 'danger')
                 return redirect(url_for('register'))
 
             # Обработка загрузки фотографии
@@ -81,8 +81,7 @@ def init_routes(app):
 
                 # Создание нового пользователя
                 new_user = User(
-                    username=form.username.data,
-                    email=form.email.data,
+                    email=form.email.data,  # Используйте email вместо username
                     role='student'  # Установка роли пользователя по умолчанию
                 )
                 new_user.set_password(form.password.data)  # Хеширование пароля

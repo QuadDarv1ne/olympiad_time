@@ -64,6 +64,12 @@ olympiad_time/
 └── requirements.txt           # Зависимости проекта
 ```
 
+### Создание базы данных
+```
+python .\create_db.py
+python .\populate_db.py
+```
+
 ### Запуск проекта
 ```
 python run.py

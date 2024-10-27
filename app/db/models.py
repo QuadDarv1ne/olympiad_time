@@ -9,10 +9,6 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150), nullable=False)                      # Имя
-    last_name = db.Column(db.String(150), nullable=False)                       # Фамилия
-    patronymic = db.Column(db.String(150), nullable=True)                       # Отчество
-    grade = db.Column(db.String(50), nullable=True)                             # Класс
     email = db.Column(db.String(150), unique=True, nullable=False, index=True)  # Электронная почта
     phone_number = db.Column(db.String(20), nullable=True)                      # Номер телефона
     photo = db.Column(db.String(256), nullable=True)                            # Фото
@@ -58,6 +54,7 @@ class Student(db.Model):
     student_last_name = db.Column(db.String(150), nullable=False)              # Фамилия студента
     student_patronymic = db.Column(db.String(150), nullable=True)              # Отчество студента
     grade = db.Column(db.String(50), nullable=True)                            # Класс студента
+    email = db.Column(db.String(150), unique=True, nullable=False, index=True) # Электронная почта
     phone_number = db.Column(db.String(20), nullable=True)                     # Номер телефона студента
     photo = db.Column(db.String(256), nullable=True)                           # Фото студента
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Внешний ключ на пользователя
