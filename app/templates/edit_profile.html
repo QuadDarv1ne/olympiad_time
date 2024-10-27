@@ -17,9 +17,9 @@
         </div>
 
         <div class="mb-3">
-            {{ form.student_last_name.label(class="form-label") }}
-            {{ form.student_last_name(class="form-control") }}
-            {% for error in form.student_last_name.errors %}
+            {{ form.student_surname.label(class="form-label") }}
+            {{ form.student_surname(class="form-control") }}
+            {% for error in form.student_surname.errors %}
                 <div class="text-danger">{{ error }}</div>
             {% endfor %}
         </div>

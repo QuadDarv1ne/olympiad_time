@@ -15,11 +15,11 @@ def populate_db():
 
         # Создание пользователей
         users = [
-            User(email='ivan@example.com', phone_number='89001234567',
+            User(email='ivan@example.com', phone_number='+7-900-123-45-67',
                  photo='static/images/profile_pics/super-cat.jpg', role='student'),
-            User(email='maria@example.com', phone_number='89007654321',
+            User(email='maria@example.com', phone_number='+7-900-765-43-21',
                  photo='static/images/profile_pics/super-cat.jpg', role='student'),
-            User(email='alexey@example.com', phone_number='89009876543',
+            User(email='alexey@example.com', phone_number='+7-900-987-65-43',
                  photo='static/images/profile_pics/super-cat.jpg', role='student'),
         ]
 
@@ -34,13 +34,13 @@ def populate_db():
         # Создание студентов
         students = [
             Student(student_name='Иван', student_surname='Иванов', student_patronymic='Иванович',
-                    grade='10', email='ivan@example.com', phone_number='89001234567',
+                    grade='10', email='ivan@example.com', phone_number='+7-900-123-45-67',
                     photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 1", user_id=users[0].id),
             Student(student_name='Мария', student_surname='Петрова', student_patronymic='Сергеевна',
-                    grade='11', email='maria@example.com', phone_number='89007654321',
+                    grade='11', email='maria@example.com', phone_number='+7-900-765-43-21',
                     photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 2", user_id=users[1].id),
             Student(student_name='Алексей', student_surname='Сидоров', student_patronymic='Александрович',
-                    grade='9', email='alexey@example.com', phone_number='89009876543',
+                    grade='9', email='alexey@example.com', phone_number='+7-900-987-65-43',
                     photo='static/images/profile_pics/super-cat.jpg', bio = "Пример биографии 3", user_id=users[2].id),
         ]
         

@@ -17,7 +17,7 @@ def edit_profile():
     if form.validate_on_submit():
         # Обновление данных студента
         student.student_name = form.student_name.data
-        student.student_last_name = form.student_last_name.data
+        student.student_surname = form.student_surname.data
         student.student_patronymic = form.student_patronymic.data
         student.grade = form.grade.data
         student.email = form.email.data
