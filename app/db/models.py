@@ -32,7 +32,6 @@ class Account(db.Model, UserMixin):
     def __repr__(self):
         return f'<Account id={self.id}, email={self.email}>'  # Изменено для отображения ID и email
 
-
 # Модель для результатов (Result)
 class Result(db.Model):
     __tablename__ = 'result'

@@ -12,6 +12,7 @@
 import sys
 import os
 from datetime import datetime
+import json
 
 # Устанавливаем путь до корня проекта
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -96,6 +97,12 @@ def add_olympiads():
             ]}
         ]
 
+        # Сохраняем данные в JSON файл
+        with open('olympiads_data.json', 'w', encoding='utf-8') as f:
+            json.dump(olympiads_data, f, ensure_ascii=False, indent=4)
+        print("Данные олимпиад успешно сохранены в файл olympiads_data.json")
+
+        # Добавление олимпиад в базу данных
         for olympiad_group in olympiads_data:
             # Ищем предмет по имени
             subject = next((sub for sub in subjects if sub.name == olympiad_group['subject']), None)

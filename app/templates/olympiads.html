@@ -8,9 +8,15 @@
     <ul class="list-group">
         {% for olympiad in olympiads %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ olympiad.name }} - {{ olympiad.date.strftime('%d.%m.%Y') }}
-                <a href="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" class="btn btn-primary">Записаться</a>
-            </li>
+                <div>
+                    <h5>{{ olympiad.title }}</h5>
+                    <p>Дата: {{ olympiad.date.strftime('%d.%m.%Y') }}</p>
+                    <p>{{ olympiad.description }}</p>
+                </div>
+                <form action="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" method="POST">
+                    <button type="submit" class="btn btn-primary">Записаться</button>
+                </form>
+            </li>        
         {% endfor %}
     </ul>
 </div>

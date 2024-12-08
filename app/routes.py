@@ -103,7 +103,8 @@ def init_routes(app):
     # Маршрут для страницы олимпиад
     @app.route('/olympiads')
     def olympiads():
-        olympiads = load_olympiads()
+        # Загружаем данные из базы данных
+        olympiads = Olympiad.query.all()
         return render_template('olympiads.html', olympiads=olympiads)
 
     # Обработка ошибки 404 (не найдено)
@@ -111,43 +112,49 @@ def init_routes(app):
     def page_not_found(e):
         return render_template('404.html'), 404
     
-    @app.route('/register_olympiad/<int:olympiad_id>', methods=['GET', 'POST'])
+    @app.route('/register_olympiad/<int:olympiad_id>', methods=['POST'])
     @login_required
     def register_olympiad(olympiad_id):
-        olympiads = load_olympiads()
-        olympiad = next((o for o in olympiads if o['id'] == olympiad_id), None)
+        olympiad = Olympiad.query.get_or_404(olympiad_id)
 
-        if olympiad is None:
-            flash('Олимпиада не найдена.', 'danger')
+        # Проверка: уже зарегистрирован ли студент
+        existing_registration = OlympiadRegistration.query.filter_by(
+            student_id=current_user.id, 
+            olympiad_id=olympiad_id
+        ).first()
+
+        if existing_registration:
+            flash('Вы уже зарегистрированы на эту олимпиаду.', 'info')
             return redirect(url_for('olympiads'))
 
-        form = OlympiadRegistrationForm()
+        # Создаём новую запись о регистрации
+        registration = OlympiadRegistration(
+            student_id=current_user.id,
+            olympiad_id=olympiad_id
+        )
+        db.session.add(registration)
+        db.session.commit()
 
-        if form.validate_on_submit():
-            # Проверка, зарегистрирован ли уже пользователь на олимпиаду
-            registration = OlympiadRegistration.query.filter_by(student_id=current_user.id, olympiad_id=olympiad_id).first()
-            if registration:
-                flash('Вы уже зарегистрированы на эту олимпиаду!', 'warning')
-                return redirect(url_for('olympiads'))
-
-            # Создание новой регистрации
-            new_registration = OlympiadRegistration(student_id=current_user.id, olympiad_id=olympiad_id)
-            db.session.add(new_registration)
-            db.session.commit()
-
-            flash('Вы успешно зарегистрировались на олимпиаду!', 'success')
-            return redirect(url_for('olympiads'))
-
-        return render_template('register_olympiad.html', olympiad=olympiad, form=form)
+        flash(f'Вы успешно зарегистрировались на олимпиаду "{olympiad.id}"', 'success')
+        return redirect(url_for('olympiads'))
 
     @app.route('/profile/<int:student_id>')
     @login_required
     def profile(student_id):
-        student = Student.query.get(student_id)
+        student = Account.query.get(student_id)
+        
         if not student:
             flash('Студент не найден', 'danger')
             return redirect(url_for('index'))
-        return render_template('profile.html', student=student)
+        
+        # Получение предметов через олимпиады, на которые зарегистрирован студент
+        subjects = Subject.query.filter(
+            Subject.id.in_(
+                [reg.olympiad.subject_id for reg in student.registrations]
+            )
+        ).all()
+
+        return render_template('profile.html', student=student, subjects=subjects)
 
     @app.route('/profile/edit', methods=['GET', 'POST'])
     @login_required
