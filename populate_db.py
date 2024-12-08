@@ -1,4 +1,5 @@
 # app/populate_db.py
+'''
 from app import create_app
 from app.db.database import db
 from app.db.models import User, Student, Result
@@ -63,3 +64,4 @@ def populate_db():
 
 if __name__ == '__main__':
     populate_db()
+'''
