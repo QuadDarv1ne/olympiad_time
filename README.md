@@ -91,6 +91,8 @@ python .\populate_db.py
 ### Запуск проекта
 ```cmd
 python run.py
+или
+flask run
 ```
 
 ### Работа с проектом

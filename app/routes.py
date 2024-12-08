@@ -71,11 +71,11 @@ def init_routes(app):
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 # Для нового пользователя используем уникальное имя файла (например, с использованием email)
-                filename = f"{form.email.data}.{filename}"  # или используйте какое-то другое уникальное значение
+                filename = f"{form.email.data}_{filename}"  # Уникальное имя файла
 
                 # Путь для сохранения фотографии
                 photo_path = os.path.join('app', 'static', 'images', 'profile_pics', filename)
-                
+
                 # Сохраняем фотографию
                 file.save(photo_path)
 
@@ -88,9 +88,12 @@ def init_routes(app):
                 db.session.commit()
 
                 flash('Регистрация прошла успешно. Теперь вы можете войти в систему.', 'success')
-                return redirect(url_for('login'))
+                return redirect(url_for('login'))  # После успешной регистрации перенаправляем на страницу логина
 
             flash('Недопустимый файл. Пожалуйста, загрузите изображение формата PNG, JPG или GIF.', 'danger')
+
+        return render_template('register.html', form=form)
+
 
     # Выход из системы
     @app.route('/logout')
@@ -111,7 +114,7 @@ def init_routes(app):
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template('404.html'), 404
-    
+
     @app.route('/register_olympiad/<int:olympiad_id>', methods=['POST'])
     @login_required
     def register_olympiad(olympiad_id):
@@ -135,7 +138,7 @@ def init_routes(app):
         db.session.add(registration)
         db.session.commit()
 
-        flash(f'Вы успешно зарегистрировались на олимпиаду "{olympiad.id}"', 'success')
+        flash(f'Вы успешно зарегистрировались на олимпиаду "{olympiad.name}"', 'success')
         return redirect(url_for('olympiads'))
 
     @app.route('/profile/<int:student_id>')

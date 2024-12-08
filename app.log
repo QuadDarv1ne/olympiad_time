@@ -1,0 +1,14 @@
+2024-12-08 22:05:47,027 - ERROR - Exception on /register [GET]
+Traceback (most recent call last):
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1212, in make_response
+    raise TypeError(
+    ...<3 lines>...
+    )
+TypeError: The view function for 'register' did not return a valid response. The function either returned None or ended without a return statement.
