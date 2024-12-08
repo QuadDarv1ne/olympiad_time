@@ -4,13 +4,13 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-# Модель пользователя (User)
+# Модель аккаунта (Account)
 class Account(db.Model, UserMixin):
     __tablename__ = 'account'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False, index=True)              # Электронная почта
-    phone_number = db.Column(db.String(20), nullable=True)                                  # Номер телефона
+    phone_number = db.Column(db.String(20), nullable=True, index=True)                      # Номер телефона
     photo = db.Column(db.String(256), nullable=True)                                        # Фото
     password_hash = db.Column(db.String(256), nullable=False)                               # Хеш пароля
     role = db.Column(db.String(50), nullable=False, default='student')                      # Роль пользователя
@@ -30,7 +30,7 @@ class Account(db.Model, UserMixin):
 
     # Представление объекта для отладки
     def __repr__(self):
-        return f'<User {self.first_name} {self.last_name}>'  # Изменено для отображения имени и фамилии
+        return f'<Account id={self.id}, email={self.email}>'  # Изменено для отображения ID и email
 
 
 # Модель для результатов (Result)
@@ -38,14 +38,14 @@ class Result(db.Model):
     __tablename__ = 'result'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Внешний ключ на пользователя
-    score = db.Column(db.Integer, nullable=False)                              # Баллы
-    olympiad_name = db.Column(db.String(150), nullable=False)                  # Название олимпиады
-    date = db.Column(db.DateTime, default=datetime.utcnow)                     # Дата результата
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False) # Внешний ключ на Account
+    score = db.Column(db.Integer, nullable=False)                                   # Баллы
+    olympiad_name = db.Column(db.String(150), nullable=False)                       # Название олимпиады
+    date = db.Column(db.DateTime, default=datetime.utcnow)                          # Дата результата
 
     # Представление объекта для отладки
     def __repr__(self):
-        return f'<Result {self.olympiad_name} - {self.score}>'
+        return f'<Result olympiad={self.olympiad_name}, score={self.score}>'
 
 
 # Модель для студентов (Student)
@@ -53,18 +53,18 @@ class Student(db.Model):
     __tablename__ = 'student'
 
     id = db.Column(db.Integer, primary_key=True)
-    student_name = db.Column(db.String(150), nullable=False)                   # Имя студента
-    student_surname = db.Column(db.String(150), nullable=False)                # Фамилия студента
-    student_patronymic = db.Column(db.String(150), nullable=True)              # Отчество студента
-    grade = db.Column(db.String(50), nullable=True)                            # Класс студента
-    email = db.Column(db.String(150), unique=True, nullable=False, index=True) # Электронная почта
-    phone_number = db.Column(db.String(20), nullable=True)                     # Номер телефона студента
-    photo = db.Column(db.String(256), nullable=True)                           # Фото студента
-    bio = db.Column(db.String(256), nullable=True)                             # Биография студента
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Внешний ключ на пользователя
+    student_name = db.Column(db.String(150), nullable=False)                         # Имя студента
+    student_surname = db.Column(db.String(150), nullable=False)                      # Фамилия студента
+    student_patronymic = db.Column(db.String(150), nullable=True)                    # Отчество студента
+    grade = db.Column(db.String(50), nullable=True)                                  # Класс студента
+    email = db.Column(db.String(150), unique=True, nullable=False, index=True)       # Электронная почта
+    phone_number = db.Column(db.String(20), nullable=True)                           # Номер телефона студента
+    photo = db.Column(db.String(256), nullable=True)                                 # Фото студента
+    bio = db.Column(db.String(256), nullable=True)                                   # Биография студента
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)  # Внешний ключ на Account
 
-    # Связь с пользователем
-    user = db.relationship('User', backref=db.backref('students', lazy=True))
+    # Связь с аккаунтом
+    account = db.relationship('Account', backref=db.backref('students', lazy=True))
 
     # Представление объекта для отладки
     def __repr__(self):
@@ -91,10 +91,10 @@ class Olympiad(db.Model):
 
 class OlympiadRegistration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)       # Связь с пользователем
+    student_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)    # Связь с аккаунтом
     olympiad_id = db.Column(db.Integer, db.ForeignKey('olympiad.id'), nullable=False)  # Связь с олимпиадой
 
-    student = db.relationship('User', backref='registrations')
+    student = db.relationship('Account', backref='registrations')
     olympiad = db.relationship('Olympiad', backref='registrations')
 
 
@@ -161,6 +161,7 @@ class Scores(db.Model):
 
     def __repr__(self):
         return f'<Scores {self.participant_status} - {self.passing_score}>'
+
 
 # Модель этапов олимпиады
 class OlympiadStages(db.Model):

@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, OlympiadRegistrationForm
-from app.db.models import OlympiadRegistration, Student, User, Olympiad
+from app.db.models import Account, Result, Student, Olympiad, OlympiadRegistration, Direction, Direction, School, Subject, Scores, OlympiadStages
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -40,7 +40,7 @@ def init_routes(app):
 
         form = LoginForm()
         if form.validate_on_submit():
-            user = User.query.filter_by(email=form.username.data).first()
+            user = Account.query.filter_by(email=form.username.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
                 flash('Вы успешно вошли в систему!', 'success')
@@ -58,7 +58,7 @@ def init_routes(app):
 
         form = RegistrationForm()
         if form.validate_on_submit():
-            if User.query.filter_by(email=form.email.data).first():
+            if Account.query.filter_by(email=form.email.data).first():
                 flash('Пользователь с таким email уже существует.', 'danger')
                 return redirect(url_for('register'))
 
@@ -74,7 +74,7 @@ def init_routes(app):
                 filename = f"{current_user.id}_{filename}"
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                new_user = User(email=form.email.data, role='student')
+                new_user = Account(email=form.email.data, role='student')
                 new_user.set_password(form.password.data)
                 new_user.photo = filename
 
