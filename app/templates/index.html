@@ -5,15 +5,21 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center py-5">
+<!-- Добро пожаловать -->
+<div class="jumbotron text-center py-5 bg-primary text-white rounded">
     <h1 class="display-4">Добро пожаловать</h1>
-    <p class="lead">Присоединяйтесь к олимпиаде и откройте путь в лучшие учебные заведения!</p>
+    <p class="lead">Присоединяйтесь к олимпиаде и откройте путь в лучшие учебные заведения :D</p>
+    <br>
+    <p class="lead text-right">Предме́тная олимпиа́да — состязание учащихся учреждений среднего общего, высшего или профессионального образования, требующее от участников демонстрации знаний и навыков в области одной или нескольких изучаемых дисциплин.</p>
+    <p class="lead text-right">Олимпиады нередко сопровождаются церемонией открытия и торжественным закрытием с подведением итогов и награждением лучших. В России проводится значительное число предметных олимпиад как регионального, так и федерального уровня.</p>
+    <p class="lead text-right">Проведением олимпиад обычно занимаются различные образовательные организации: школы и вузы. Проведением массовых олимпиад может заниматься правительство страны или международные организации. Также иногда олимпиады проводят коммерческие фирмы (особенно часто компании, связанные c IT, проводят олимпиады по программированию).</p>
 </div>
 
+<!-- Контейнер с карточками -->
 <div class="container py-5">
     <h2 class="text-center mb-4">Вы можете получить</h2>
     <div class="row text-center">
-        <!-- Первая карточка -->
+        <!-- Карточка 1 -->
         <div class="col-md-3 mb-4">
             <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
@@ -24,7 +30,7 @@
             </div>
         </div>
 
-        <!-- Вторая карточка -->
+        <!-- Карточка 2 -->
         <div class="col-md-3 mb-4">
             <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
@@ -35,7 +41,7 @@
             </div>
         </div>
 
-        <!-- Третья карточка -->
+        <!-- Карточка 3 -->
         <div class="col-md-3 mb-4">
             <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
@@ -46,7 +52,7 @@
             </div>
         </div>
 
-        <!-- Четвертая карточка -->
+        <!-- Карточка 4 -->
         <div class="col-md-3 mb-4">
             <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
@@ -60,11 +66,11 @@
 
     <!-- Кнопка для участия -->
     <div class="text-center mt-5">
-        <a href="#" class="btn btn-primary btn-lg" style="animation: pulse 2s infinite;">Принять участие</a>
+        <a href="#" class="btn btn-primary btn-lg animated pulse infinite">Принять участие</a>
     </div>
 </div>
 
-<!-- Дополнительная информация с трофеем и персонажем -->
+<!-- Информация о олимпиаде -->
 <div class="container py-5">
     <div class="row align-items-center">
         <div class="col-md-6 text-center">
@@ -73,11 +79,82 @@
         <div class="col-md-6">
             <h2>Олимпиада «Шаг в будущее»</h2>
             <p>Олимпиада школьников по математике проводится среди учащихся 8-11 классов с целью поступления в технические вузы. Победители могут получить дополнительные преимущества при поступлении в ведущие университеты страны.</p>
-            <a href="#" class="btn btn-info btn-lg" style="animation: bounce 1s infinite;">Подробнее</a>
+            <a href="#" class="btn btn-info btn-lg animated bounce infinite">Подробнее</a>
         </div>
     </div>
 </div>
 
+<!-- Направления и предметы -->
+<div class="container py-5">
+    <h2 class="text-center mb-4">Направления и предметы</h2>
+    <div class="row">
+        <!-- Направления -->
+        <div class="col-md-6">
+            <h4>Направления</h4>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>1. Естественные науки</strong></li>
+                <li class="list-group-item"><strong>2. Общественные науки</strong></li>
+                <li class="list-group-item"><strong>3. Гуманитарные науки</strong></li>
+                <li class="list-group-item"><strong>4. Технические науки</strong></li>
+                <li class="list-group-item"><strong>5. Спортивное направление</strong></li>
+            </ul>
+        </div>
+
+        <!-- Предметы по направлениям -->
+        <div class="col-md-6">
+            <h4>Предметы</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Естественные науки</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Математика</li>
+                        <li class="list-group-item">Астрономия</li>
+                        <li class="list-group-item">Биология</li>
+                        <li class="list-group-item">География</li>
+                        <li class="list-group-item">Экология</li>
+                        <li class="list-group-item">Физика</li>
+                        <li class="list-group-item">Химия</li>
+                    </ul>
+
+                    <h5 class="mt-4">Общественные науки</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Экономика</li>
+                        <li class="list-group-item">Обществознание</li>
+                        <li class="list-group-item">Право</li>
+                        <li class="list-group-item">ОБЖ (Основы безопасности жизнедеятельности)</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <h5>Гуманитарные науки</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Русский язык</li>
+                        <li class="list-group-item">Литература</li>
+                        <li class="list-group-item">Английский язык</li>
+                        <li class="list-group-item">Испанский язык</li>
+                        <li class="list-group-item">Китайский язык</li>
+                        <li class="list-group-item">Немецкий язык</li>
+                        <li class="list-group-item">Французский язык</li>
+                        <li class="list-group-item">Искусство</li>
+                    </ul>
+
+                    <h5 class="mt-4">Технические науки</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Информатика</li>
+                        <li class="list-group-item">Технология</li>
+                    </ul>
+
+                    <h5 class="mt-4">Спортивное направление</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Физическая культура</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Стили -->
 <style>
     /* Анимация для карточек */
     .card:hover {
@@ -106,6 +183,20 @@
         50% {
             transform: translateY(-10px);
         }
+    }
+
+    /* Анимации для кнопок */
+    .animated {
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    .bounce {
+        animation: bounce 1s infinite;
     }
 </style>
 
