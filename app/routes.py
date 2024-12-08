@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, OlympiadRegistrationForm
-from app.db.models import Account, Result, Student, Olympiad, OlympiadRegistration, Direction, Direction, School, Subject, Scores, OlympiadStages
+from app.db.models import Account, Result, Student, Olympiad, OlympiadRegistration, Direction, School, Subject, Scores, OlympiadStages
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -40,9 +40,9 @@ def init_routes(app):
 
         form = LoginForm()
         if form.validate_on_submit():
-            user = Account.query.filter_by(email=form.username.data).first()
-            if user and user.check_password(form.password.data):
-                login_user(user)
+            account = Account.query.filter_by(email=form.username.data).first()
+            if account and account.check_password(form.password.data):
+                login_user(account)
                 flash('Вы успешно вошли в систему!', 'success')
                 return redirect(request.args.get('next') or url_for('index'))
             flash('Неправильное имя пользователя или пароль', 'danger')
@@ -70,22 +70,27 @@ def init_routes(app):
             file = request.files['photo']
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                # Создаем уникальное имя файла
-                filename = f"{current_user.id}_{filename}"
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # Для нового пользователя используем уникальное имя файла (например, с использованием email)
+                filename = f"{form.email.data}.{filename}"  # или используйте какое-то другое уникальное значение
 
-                new_user = Account(email=form.email.data, role='student')
-                new_user.set_password(form.password.data)
-                new_user.photo = filename
+                # Путь для сохранения фотографии
+                photo_path = os.path.join('app', 'static', 'images', 'profile_pics', filename)
+                
+                # Сохраняем фотографию
+                file.save(photo_path)
 
-                db.session.add(new_user)
+                # Создаем нового пользователя
+                new_account = Account(email=form.email.data, role='student')
+                new_account.set_password(form.password.data)
+                new_account.photo = filename  # Сохраняем имя файла в базе данных
+
+                db.session.add(new_account)
                 db.session.commit()
 
                 flash('Регистрация прошла успешно. Теперь вы можете войти в систему.', 'success')
                 return redirect(url_for('login'))
-            flash('Недопустимый файл. Пожалуйста, загрузите изображение формата PNG, JPG или GIF.', 'danger')
 
-        return render_template('register.html', form=form)
+            flash('Недопустимый файл. Пожалуйста, загрузите изображение формата PNG, JPG или GIF.', 'danger')
 
     # Выход из системы
     @app.route('/logout')
@@ -149,7 +154,7 @@ def init_routes(app):
     def edit_profile():
         form = EditProfileForm()
         if form.validate_on_submit():
-            # Обновление профиля пользователя
+            # Обновление профиля аккаунта
             current_user.email = form.email.data
             if 'photo' in request.files:
                 file = request.files['photo']

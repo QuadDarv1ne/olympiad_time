@@ -1,19 +1,28 @@
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.forms import LoginForm, RegistrationForm
-from app.db.models import User, Student
+from app.db.models import Account, Student
 from app.db.database import db
 
 def init_routes(app):
+    """
+    Инициализация маршрутов для аутентификации и регистрации пользователей.
+
+    - /login: Страница входа.
+    - /register: Страница регистрации.
+    - /logout: Выход из системы.
+    """
+    
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        """Обработка страницы входа."""
         if current_user.is_authenticated:
             return redirect(url_for('main.index'))
         form = LoginForm()
         if form.validate_on_submit():
-            user = User.query.filter_by(email=form.username.data).first()  # Используйте email
-            if user and user.check_password(form.password.data):
-                login_user(user)
+            account = Account.query.filter_by(email=form.username.data).first()
+            if account and account.check_password(form.password.data):
+                login_user(account)
                 flash('Вы успешно вошли в систему!', 'success')
                 return redirect(url_for('main.index'))
             flash('Неправильное имя пользователя или пароль', 'danger')
@@ -21,28 +30,26 @@ def init_routes(app):
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
+        """Обработка страницы регистрации."""
         if current_user.is_authenticated:
             return redirect(url_for('main.index'))
         form = RegistrationForm()
-        
-        # Проверяем, существует ли уже пользователь с таким email
-        existing_user = User.query.filter_by(email=form.email.data).first()
-        if existing_user:
+
+        existing_account = Account.query.filter_by(email=form.email.data).first()
+        if existing_account:
             flash('Пользователь с таким email уже существует.', 'danger')
             return render_template('register.html', form=form)
 
         if form.validate_on_submit():
-            # Создание объекта User
-            user = User(
+            account = Account(
                 email=form.email.data,
                 phone_number=form.phone.data,
-                photo=None  # Укажите по умолчанию или обработайте позже
+                photo=None
             )
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.flush()  # Чтобы получить id нового пользователя для Student
+            account.set_password(form.password.data)
+            db.session.add(account)
+            db.session.flush()  # Для получения id аккаунта
 
-            # Создание объекта Student
             student = Student(
                 student_name=form.name.data,
                 student_last_name=form.surname.data,
@@ -50,8 +57,8 @@ def init_routes(app):
                 grade=form.grade.data,
                 email=form.email.data,
                 phone_number=form.phone.data,
-                photo=None,  # Укажите по умолчанию или обработайте позже
-                user_id=user.id  # Связь с пользователем
+                photo=None,
+                user_id=account.id
             )
 
             db.session.add(student)
@@ -65,6 +72,7 @@ def init_routes(app):
     @app.route('/logout')
     @login_required
     def logout():
+        """Обработка выхода из системы."""
         logout_user()
         flash('Вы вышли из системы.', 'success')
         return redirect(url_for('main.index'))
