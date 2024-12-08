@@ -10,3 +10,7 @@ Flask-WTF
 email-validator
 Werkzeug
 Flask-Bcrypt
+flask-asgi
+daphne
+hypercorn
+uvicorn

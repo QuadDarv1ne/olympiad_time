@@ -28,18 +28,22 @@ def init_routes(app):
             flash('Неправильное имя пользователя или пароль', 'danger')
         return render_template('login.html', form=form)
 
+
     @app.route('/register', methods=['GET', 'POST'])
     def register():
         """Обработка страницы регистрации."""
         if current_user.is_authenticated:
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.index'))  # Если пользователь уже авторизован, редирект на главную страницу
+        
         form = RegistrationForm()
 
+        # Проверка на существование пользователя с таким же email
         existing_account = Account.query.filter_by(email=form.email.data).first()
         if existing_account:
             flash('Пользователь с таким email уже существует.', 'danger')
-            return render_template('register.html', form=form)
+            return render_template('register.html', form=form)  # Если пользователь уже существует, возвращаем форму с ошибкой
 
+        # Если форма отправлена и прошла валидацию
         if form.validate_on_submit():
             account = Account(
                 email=form.email.data,
@@ -64,10 +68,12 @@ def init_routes(app):
             db.session.add(student)
             db.session.commit()
 
-            flash('Ваш аккаунт создан! Теперь вы можете войти.', 'success')
-            return redirect(url_for('auth.login'))
-        
-        return render_template('register.html', form=form)
+            flash('Ваш аккаунт создан. Теперь вы можете войти.', 'success')
+            return redirect(url_for('auth.login'))  # Перенаправляем на страницу логина после успешной регистрации
+
+        # Если форма не прошла валидацию (например, неверно введены данные) или запрос GET
+        return render_template('register.html', form=form)  # Возвращаем форму с ошибками
+
 
     @app.route('/logout')
     @login_required
