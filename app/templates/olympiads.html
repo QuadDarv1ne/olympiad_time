@@ -4,20 +4,60 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Доступные олимпиады</h2>
+    <h2 class="text-center text-3xl font-semibold text-blue-600 mb-6">Доступные олимпиады</h2>
     <ul class="list-group">
         {% for olympiad in olympiads %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center border border-gray-300 shadow-md p-4 rounded-lg hover:shadow-xl transition-all">
                 <div>
-                    <h5>{{ olympiad.title }}</h5>
-                    <p>Дата: {{ olympiad.date.strftime('%d.%m.%Y') }}</p>
-                    <p>{{ olympiad.description }}</p>
+                    <h5 class="text-xl font-semibold text-blue-500">{{ olympiad.title }}</h5>
+                    <p class="text-sm text-gray-600">Дата: {{ olympiad.date.strftime('%d.%m.%Y') }}</p>
+                    <p class="text-gray-700">{{ olympiad.description }}</p>
                 </div>
                 <form action="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" method="POST">
-                    <button type="submit" class="btn btn-primary">Записаться</button>
+                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-lg text-white transition-all duration-300 transform hover:scale-105 hover:bg-blue-600">
+                        Записаться
+                    </button>
                 </form>
-            </li>        
+            </li>
         {% endfor %}
     </ul>
 </div>
+
+<style>
+    /* Стиль для карточек олимпиады */
+    .list-group-item {
+        background-color: #fff;
+        border: 1px solid #e5e7eb;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .list-group-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Стиль для кнопки "Записаться" */
+    .btn-primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #1e40af;
+        border-color: #1e40af;
+        transform: scale(1.05);
+    }
+
+    /* Общий стиль для заголовков и текста */
+    h5 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #3b82f6;
+    }
+
+    p {
+        color: #4b5563;
+    }
+</style>
+
 {% endblock %}
