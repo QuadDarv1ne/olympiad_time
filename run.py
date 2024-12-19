@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 # Определяем конфигурацию на основе переменной окружения
-config_name = os.getenv('FLASK_CONFIG') or 'default'
+config_name = os.getenv('FLASK_CONFIG', 'development')
 
 # Создаем приложение с помощью функции create_app
 app = create_app(config_name)
@@ -12,7 +12,7 @@ app = create_app(config_name)
 # Функция для настройки логирования
 def setup_logging():
     if not os.path.exists('logs'):
-        os.mkdir('logs')
+        os.mkdir('logs')  # Создаем директорию для логов, если она не существует
     file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240, backupCount=10)
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
@@ -33,3 +33,5 @@ if __name__ == "__main__":
         app.run(debug=True, host="127.0.0.1", port=8080)
     except Exception as e:
         app.logger.error(f"Failed to start the application: {e}")
+        # Выводим ошибку в консоль
+        print(f"Failed to start the application: {e}")
