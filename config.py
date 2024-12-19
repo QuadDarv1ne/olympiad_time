@@ -11,7 +11,10 @@ class Config:
 
     # Настройки базы данных
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Получаем абсолютный путь к директории проекта
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or f'sqlite:///{os.path.join(BASE_DIR, "instance", "olympiad_time.db")}'
+    DB_DIR = os.path.join(BASE_DIR, 'instance')
+    if not os.path.exists(DB_DIR):
+        os.makedirs(DB_DIR)
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or f'sqlite:///{os.path.join(DB_DIR, "olympiad_time.db")}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Отключение отслеживания изменений для уменьшения использования памяти
 
     # Настройки почтового сервера
@@ -34,7 +37,7 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL') or f'sqlite:///{os.path.join(Config.BASE_DIR, "instance", "test.db")}'
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL') or f'sqlite:///{os.path.join(Config.DB_DIR, "test.db")}'
     WTF_CSRF_ENABLED = False  # Отключение CSRF для тестов
 
 
@@ -79,6 +82,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
     'default': DevelopmentConfig
 }

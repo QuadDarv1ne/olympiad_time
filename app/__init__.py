@@ -1,8 +1,7 @@
-# app/__init__.py
 from flask import Flask
 from flask_login import LoginManager
 from app.routes import init_routes
-from config import Config
+from config import config  # Импортируем конфигурации
 import logging
 from logging.handlers import RotatingFileHandler
 from app.db.database import db, migrate  # Импортируем db и migrate
@@ -11,9 +10,10 @@ from app.db import init_db  # Импортируем инициализацию 
 # Инициализация LoginManager
 login_manager = LoginManager()
 
-def create_app():
+def create_app(config_name='default'):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
 
     # Инициализация расширений
     db.init_app(app)  # Инициализация db
@@ -27,7 +27,10 @@ def create_app():
     init_routes(app)
 
     # Создание таблиц, если их нет (для разработки)
-    init_db(app)  # Передаем app
+    with app.app_context():
+        if not os.path.exists(app.config['DB_DIR']):
+            os.makedirs(app.config['DB_DIR'])
+        db.create_all()
 
     # Настройка логирования
     setup_logging(app)
