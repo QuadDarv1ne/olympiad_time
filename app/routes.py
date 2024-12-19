@@ -94,7 +94,16 @@ def init_routes(app):
 
         return render_template('register.html', form=form)
 
-
+    @app.route('/forgot_password', methods=['GET', 'POST'])
+    def forgot_password():
+        if request.method == 'POST':
+            # Ваша логика для восстановления пароля
+            email = request.form['email']
+            # Логика для отправки письма с восстановлением пароля
+            flash('Инструкции по восстановлению пароля отправлены на ваш email.')
+            return redirect(url_for('login'))
+        return render_template('forgot_password.html')
+    
     # Выход из системы
     @app.route('/logout')
     @login_required

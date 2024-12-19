@@ -21,9 +21,9 @@
     <div class="row text-center">
         <!-- Карточка 1 -->
         <div class="col-md-3 mb-4">
-            <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
+            <div class="card shadow-lg border-light hover-shadow" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
-                    <img src="{{ url_for('static', filename='images/states/zachislenie_v_vuz.png') }}" alt="Зачисление в вуз" class="mb-3 img-fluid" style="border-radius: 10px; transition: transform 0.3s ease;">
+                    <img src="{{ url_for('static', filename='images/states/zachislenie_v_vuz.png') }}" alt="Зачисление в вуз" class="mb-3 img-fluid rounded" style="transition: transform 0.3s ease;">
                     <h5><i class="bi bi-bookmark-check"></i> Зачисление в вуз без экзаменов (БВИ)</h5>
                     <p>93 вуза</p>
                 </div>
@@ -32,9 +32,9 @@
 
         <!-- Карточка 2 -->
         <div class="col-md-3 mb-4">
-            <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
+            <div class="card shadow-lg border-light hover-shadow" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
-                    <img src="{{ url_for('static', filename='images/states/ekzame_100.png') }}" alt="Профильный экзамен" class="mb-3 img-fluid" style="border-radius: 10px; transition: transform 0.3s ease;">
+                    <img src="{{ url_for('static', filename='images/states/ekzame_100.png') }}" alt="Профильный экзамен" class="mb-3 img-fluid rounded" style="transition: transform 0.3s ease;">
                     <h5><i class="bi bi-pencils"></i> Профильный экзамен на 100 баллов</h5>
                     <p>502 вуза</p>
                 </div>
@@ -43,9 +43,9 @@
 
         <!-- Карточка 3 -->
         <div class="col-md-3 mb-4">
-            <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
+            <div class="card shadow-lg border-light hover-shadow" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
-                    <img src="{{ url_for('static', filename='images/states/dopolnitelnie_bally.png') }}" alt="Доп. баллы" class="mb-3 img-fluid" style="border-radius: 10px; transition: transform 0.3s ease;">
+                    <img src="{{ url_for('static', filename='images/states/dopolnitelnie_bally.png') }}" alt="Доп. баллы" class="mb-3 img-fluid rounded" style="transition: transform 0.3s ease;">
                     <h5><i class="bi bi-plus-circle"></i> Дополнительные баллы при поступлении</h5>
                     <p>821 вуз от 1 до 10 баллов</p>
                 </div>
@@ -54,9 +54,9 @@
 
         <!-- Карточка 4 -->
         <div class="col-md-3 mb-4">
-            <div class="card shadow-lg border-light" style="transition: transform 0.3s ease-in-out;">
+            <div class="card shadow-lg border-light hover-shadow" style="transition: transform 0.3s ease-in-out;">
                 <div class="card-body">
-                    <img src="{{ url_for('static', filename='images/states/diploms.png') }}" alt="Дипломы" class="mb-3 img-fluid" style="border-radius: 10px; transition: transform 0.3s ease;">
+                    <img src="{{ url_for('static', filename='images/states/diploms.png') }}" alt="Дипломы" class="mb-3 img-fluid rounded" style="transition: transform 0.3s ease;">
                     <h5><i class="bi bi-trophy"></i> Дипломы</h5>
                     <p>Дипломы победителей и призеров</p>
                 </div>
@@ -66,7 +66,7 @@
 
     <!-- Кнопка для участия -->
     <div class="text-center mt-5">
-        <a href="#" class="btn btn-primary btn-lg animated pulse infinite">Принять участие</a>
+        <a href="#" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">Принять участие</a>
     </div>
 </div>
 
@@ -74,12 +74,12 @@
 <div class="container py-5">
     <div class="row align-items-center">
         <div class="col-md-6 text-center">
-            <img src="{{ url_for('static', filename='images/states/ob_olimpiad.png') }}" alt="Трофей" class="img-fluid mb-4" style="border-radius: 15%; box-shadow: 0px 4px 15px rgb(49, 70, 255);">
+            <img src="{{ url_for('static', filename='images/states/ob_olimpiad.png') }}" alt="Трофей" class="img-fluid mb-4 rounded shadow-lg">
         </div>
         <div class="col-md-6">
             <h2>Олимпиада «Шаг в будущее»</h2>
             <p>Олимпиада школьников по математике проводится среди учащихся 8-11 классов с целью поступления в технические вузы. Победители могут получить дополнительные преимущества при поступлении в ведущие университеты страны.</p>
-            <a href="#" class="btn btn-info btn-lg animated bounce infinite">Подробнее</a>
+            <a href="#" class="btn btn-info btn-lg animate__animated animate__bounce animate__infinite">Подробнее</a>
         </div>
     </div>
 </div>
@@ -156,47 +156,9 @@
 
 <!-- Стили -->
 <style>
-    /* Анимация для карточек */
-    .card:hover {
+    .hover-shadow:hover {
         transform: translateY(-10px);
         box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Пульсация кнопки */
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.1);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    /* Базовая анимация для кнопки "Подробнее" */
-    @keyframes bounce {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
-    /* Анимации для кнопок */
-    .animated {
-        animation-duration: 1s;
-        animation-timing-function: ease-in-out;
-    }
-
-    .pulse {
-        animation: pulse 2s infinite;
-    }
-
-    .bounce {
-        animation: bounce 1s infinite;
     }
 </style>
 

@@ -3,28 +3,62 @@
 {% block content %}
     <div class="container mt-5">
         <h2 class="text-center">Авторизация</h2>
-        <form method="POST" class="mt-4">
+        <form method="POST" class="mt-4 shadow p-4 rounded">
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                {{ form.username.label(class="form-label") }}
-                {{ form.username(class="form-control", size=32, placeholder="Введите e-mail") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    {{ form.username(class="form-control", size=32, placeholder="Введите e-mail") }}
+                </div>
                 {% for error in form.username.errors %}
                     <div class="text-danger mt-1">[{{ error }}]</div>
                 {% endfor %}
             </div>
             <div class="mb-3">
-                {{ form.password.label(class="form-label") }}
-                {{ form.password(class="form-control", size=32,  placeholder="Введите пароль") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    {{ form.password(class="form-control", size=32, placeholder="Введите пароль") }}
+                </div>
                 {% for error in form.password.errors %}
                     <div class="text-danger mt-1">[{{ error }}]</div>
                 {% endfor %}
             </div>
             <div class="mb-3 text-center">
-                {{ form.submit(class="btn btn-primary") }}
+                {{ form.submit(class="btn btn-primary w-100") }}
             </div>
             <div class="text-center">
                 <p>Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a></p>
+                <p><a href="{{ url_for('forgot_password') }}">Забыли пароль?</a></p>
             </div>
         </form>
     </div>
+
+    <style>
+        .input-group-text {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+        
+        .form-control {
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            border-color: #80bdff;
+        }
+
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .shadow {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 {% endblock %}

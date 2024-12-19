@@ -7,8 +7,7 @@
     <div class="row">
         <!-- Левая колонка: профиль -->
         <div class="col-md-6">
-            <div class="card profile-card shadow-lg text-white"
-                 style="background: rgba(145, 77, 255, 0.5); border-radius: 15px;">
+            <div class="card profile-card shadow-lg text-white" style="border-radius: 15px; background: linear-gradient(135deg, #4b6cb7, #182848);">
                 <div class="card-body p-4">
                     <!-- Фото профиля -->
                     <div class="profile-image mb-3 text-center">
@@ -18,7 +17,7 @@
                                  alt="Profile Picture"
                                  style="width: 150px; height: 150px; object-fit: cover;">
                         {% else %}
-                            <img src="{{ url_for('static', filename='images/profile_pics/super-cat.jpg') }}"
+                            <img src="{{ url_for('static', filename='images/profile_pics/default-placeholder.png') }}"
                                  class="img-fluid rounded-circle border border-3 border-light"
                                  alt="Default Profile Picture"
                                  style="width: 150px; height: 150px; object-fit: cover;">
@@ -26,14 +25,14 @@
                     </div>
                     
                     <!-- Имя и основные данные -->
-                    <h2 class="card-title text-center" style="color: #ff6b6b; background: linear-gradient(90deg, #4300fc, #5c16ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <h2 class="card-title text-center" style="color: #fff; font-weight: bold;">
                         {{ student.student_name }} {{ student.student_surname }} {{ student.student_patronymic }}
                     </h2>
-                    <p class="text-center">{{ student.grade }} класс</p>
+                    <p class="text-center" style="color: #f8f9fa;">{{ student.grade }} класс</p>
                     
                     <!-- Контактная информация -->
                     <div class="profile-info d-flex justify-content-center mt-4">
-                        <div class="info-block p-3 rounded" style="background: rgba(255, 255, 255, 0.3);">
+                        <div class="info-block p-3 rounded" style="background: rgba(255, 255, 255, 0.2);">
                             <p class="mb-1"><i class="fas fa-envelope text-warning"></i> {{ student.email }}</p>
                             <p class="mb-1"><i class="fas fa-phone text-warning"></i> {{ student.phone_number }}</p>
                             <p class="mb-1"><i class="fas fa-star text-warning"></i> Оценка: {{ student.score }}</p>
@@ -52,20 +51,23 @@
             </div>
         </div>
         
+        <!-- Правая колонка -->
         <div class="col-md-6">
             <!-- Карточка с олимпиадами -->
             <div class="card shadow-lg mb-4" style="border-radius: 15px;">
                 <div class="card-body p-4">
                     <h3 class="text-center">Ваши олимпиады</h3>
                     <ul class="list-group">
-                        {% for reg in student.registrations %}
-                            <li class="list-group-item">
-                                <strong>{{ reg.olympiad.name }}</strong> <br>
-                                Дата: {{ reg.olympiad.date.strftime('%d.%m.%Y') }}
-                            </li>
+                        {% if student.registrations %}
+                            {% for reg in student.registrations %}
+                                <li class="list-group-item">
+                                    <strong>{{ reg.olympiad.name }}</strong> <br>
+                                    Дата: {{ reg.olympiad.date.strftime('%d.%m.%Y') }}
+                                </li>
+                            {% endfor %}
                         {% else %}
                             <li class="list-group-item text-center">Вы ещё не зарегистрировались на олимпиады.</li>
-                        {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -76,25 +78,53 @@
                     <h3>Пройти демо-версию</h3>
                     <p>Выберите предмет для прохождения демо-версии:</p>
                     <ul class="list-group">
-                        {% for subject in student.subjects %}
-                            {% if subject.demo_version %}
-                                <li class="list-group-item">
-                                    <strong>{{ subject.name }}</strong>
-                                    <a href="{{ subject.demo_version }}" class="btn btn-primary btn-sm ms-3" target="_blank">Начать</a>
-                                </li>
-                            {% else %}
-                                <li class="list-group-item text-muted">
-                                    <strong>{{ subject.name }}</strong> — Демо-версии пока нет.
-                                </li>
-                            {% endif %}
+                        {% if student.subjects %}
+                            {% for subject in student.subjects %}
+                                {% if subject.demo_version %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ subject.name }}</strong>
+                                        <a href="{{ subject.demo_version }}" class="btn btn-primary btn-sm ms-3" target="_blank">Начать</a>
+                                    </li>
+                                {% else %}
+                                    <li class="list-group-item text-muted">
+                                        <strong>{{ subject.name }}</strong> — Демо-версии пока нет.
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
                             <!-- Если нет доступных предметов с демо-версиями -->
                             <li class="list-group-item text-center">Нет доступных предметов для демо-версий.</li>
-                        {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>        
     </div>
 </div>
+
+<style>
+    .profile-card {
+        background: linear-gradient(135deg, #4b6cb7, #182848);
+        border-radius: 15px;
+        color: #fff;
+    }
+    .profile-image img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+    .profile-info {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        color: #fff;
+    }
+    .btn {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
 {% endblock %}

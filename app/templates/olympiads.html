@@ -10,12 +10,15 @@
             <li class="list-group-item d-flex justify-content-between align-items-center border border-gray-300 shadow-md p-4 rounded-lg hover:shadow-xl transition-all">
                 <div>
                     <h5 class="text-xl font-semibold text-blue-500">{{ olympiad.title }}</h5>
-                    <p class="text-sm text-gray-600">Дата: {{ olympiad.date.strftime('%d.%m.%Y') }}</p>
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-calendar-alt"></i>
+                        Дата: {{ olympiad.date.strftime('%d.%m.%Y') }}
+                    </p>
                     <p class="text-gray-700">{{ olympiad.description }}</p>
                 </div>
                 <form action="{{ url_for('register_olympiad', olympiad_id=olympiad.id) }}" method="POST">
                     <button type="submit" class="btn btn-primary px-4 py-2 rounded-lg text-white transition-all duration-300 transform hover:scale-105 hover:bg-blue-600">
-                        Записаться
+                        <i class="fas fa-user-plus"></i> Записаться
                     </button>
                 </form>
             </li>
@@ -57,6 +60,22 @@
 
     p {
         color: #4b5563;
+    }
+
+    /* Анимация для карточек */
+    .list-group-item {
+        animation: fadeInUp 0.5s ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
