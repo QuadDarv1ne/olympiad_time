@@ -121,11 +121,13 @@
 </head>
 <body>
     <div class="certificate-container">
+        <!-- Заголовок сертификата -->
         <section class="certificate-header">
             <img src="/static/images/logo.png" alt="Логотип мероприятия" aria-label="Логотип сертификата">
             <h1>Сертификат участника</h1>
         </section>
 
+        <!-- Основное содержание сертификата -->
         <section class="certificate-content">
             <p>Настоящим подтверждается, что</p>
             <h2>{{ student_name }}</h2>
@@ -134,6 +136,7 @@
             <p>Дата проведения: {{ event_date }}</p>
         </section>
 
+        <!-- Действия -->
         <section class="actions">
             <a href="{{ url_for('download_certificate') }}" class="btn btn-download" aria-label="Скачать сертификат в формате PDF">Скачать PDF</a>
             <a href="{{ url_for('download_certificate_word') }}" class="btn btn-download" aria-label="Скачать сертификат в формате Word">Скачать Word</a>

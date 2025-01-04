@@ -1,4 +1,4 @@
-2025-01-04 17:05:44,972 - ERROR - Exception on /profile/edit [GET]
+2025-01-04 16:59:24,429 - ERROR - Exception on /profile/edit [GET]
 Traceback (most recent call last):
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,7 +12,7 @@ Traceback (most recent call last):
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
     return current_app.ensure_sync(func)(*args, **kwargs)
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\routes.py", line 147, in edit_profile
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\routes.py", line 197, in edit_profile
     return render_template('edit_profile.html', form=form)
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 150, in render_template
     return _render(app, template, context)
@@ -34,11 +34,7 @@ Traceback (most recent call last):
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 487, in getattr
     return getattr(obj, attribute)
 jinja2.exceptions.UndefinedError: 'student' is undefined
-2025-01-04 17:07:25,742 - INFO - Logging is set up.
-2025-01-04 17:44:15,566 - INFO - Logging is set up.
-2025-01-04 18:02:39,733 - INFO - Logging is set up.
-2025-01-04 18:50:28,605 - INFO - Logging is set up.
-2025-01-04 18:50:35,118 - ERROR - Exception on /login [GET]
+2025-01-04 16:59:29,926 - ERROR - Exception on /profile/edit [GET]
 Traceback (most recent call last):
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
     response = self.full_dispatch_request()
@@ -49,8 +45,11 @@ Traceback (most recent call last):
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 902, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\routes.py", line 63, in login
-    return render_template('login.html', form=form)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\routes.py", line 197, in edit_profile
+    return render_template('edit_profile.html', form=form)
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 150, in render_template
     return _render(app, template, context)
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 131, in _render
@@ -60,25 +59,52 @@ Traceback (most recent call last):
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
   File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\login.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\edit_profile.html", line 1, in top-level template code
+    {% extends 'base.html' %}
   File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\base.html", line 240, in top-level template code
     {% block content %}{% endblock %}
     ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\login.html", line 31, in block 'content'
-    <p><a href="{{ url_for('forgot_password') }}">Забыли пароль?</a></p>
-    ^^^^^^^^^
-  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1121, in url_for
-    return self.handle_url_build_error(error, endpoint, values)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1110, in url_for
-    rv = url_adapter.build(  # type: ignore[union-attr]
-        endpoint,
-    ...<3 lines>...
-        force_external=_external,
-    )
-  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
-    raise BuildError(endpoint, values, method, self)
-werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'forgot_password'. Did you mean 'logout' instead?
-2025-01-04 18:51:51,299 - INFO - Logging is set up.
-2025-01-04 18:57:17,112 - INFO - Logging is set up.
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\edit_profile.html", line 14, in block 'content'
+    {% if student.photo %}
+    ^
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 487, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'student' is undefined
+2025-01-04 16:59:37,696 - INFO - Logging is set up.
+2025-01-04 16:59:43,813 - ERROR - Exception on /profile/edit [GET]
+Traceback (most recent call last):
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\routes.py", line 197, in edit_profile
+    return render_template('edit_profile.html', form=form)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\edit_profile.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\base.html", line 240, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maksi\Documents\GitHub\olympiad_time\app\templates\edit_profile.html", line 14, in block 'content'
+    {% if student.photo %}
+    ^
+  File "C:\Users\maksi\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 487, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'student' is undefined
+2025-01-04 17:05:32,929 - INFO - Logging is set up.
