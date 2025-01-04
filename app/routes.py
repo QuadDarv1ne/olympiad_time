@@ -1,12 +1,19 @@
-import json
 import os
+import json
 from datetime import datetime
-from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
+from flask import (
+    render_template, redirect, url_for, flash, request, jsonify,
+    current_app, Flask, send_file, make_response, abort
+)
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, OlympiadRegistrationForm
 from app.db.models import Account, Result, Student, Olympiad, OlympiadRegistration, Direction, School, Subject, Scores, OlympiadStages
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
+from docx import Document
+import io
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 # Функция для проверки разрешенных форматов файлов
 def allowed_file(filename):
@@ -193,3 +200,57 @@ def init_routes(app):
     def olympiads_list():
         olympiads = Olympiad.query.all()  # Получаем все олимпиады
         return render_template('olympiads_list.html', olympiads=olympiads)
+
+    @app.route('/generate_certificate')
+    def generate_certificate():
+        student = {"student_name": "Иван", "student_surname": "Иванов"}
+        olympiad_name = "Математическая олимпиада"
+        date = datetime.now().strftime('%d.%m.%Y')
+        return render_template('certificate.html', student=student, olympiad_name=olympiad_name, date=date)
+
+    @app.route('/download_certificate')
+    def download_certificate():
+        # Генерация сертификата с помощью ReportLab
+        pdf_buffer = io.BytesIO()
+        c = canvas.Canvas(pdf_buffer, pagesize=letter)
+        c.setFont("Helvetica", 12)
+
+        c.drawString(100, 750, "Сертификат участника")
+        c.drawString(100, 730, "Настоящим подтверждается, что Иван Иванов")
+        c.drawString(100, 710, "принял(а) участие в мероприятии 'Математическая олимпиада'")
+        c.drawString(100, 690, "Дата проведения: 10 января 2025 года")
+
+        c.showPage()
+        c.save()
+
+        pdf_buffer.seek(0)
+        response = make_response(pdf_buffer.read())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'attachment; filename=certificate.pdf'
+        return response
+
+    @app.route('/download_certificate_word')
+    def download_certificate_word():
+        doc = Document()
+        doc.add_heading('Сертификат участника', level=1)
+        doc.add_paragraph('Настоящим подтверждается, что Иван Иванов')
+        doc.add_paragraph('принял(а) участие в мероприятии "Математическая олимпиада".')
+        doc.add_paragraph('Дата проведения: 10 января 2025 года')
+        doc.add_paragraph('\nРуководитель проекта\n\n___________________')
+
+        buffer = io.BytesIO()
+        doc.save(buffer)
+        buffer.seek(0)
+
+        return send_file(
+            buffer,
+            as_attachment=True,
+            download_name="certificate.docx",
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
+    # Обработка ошибок 404
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('404.html'), 404
+    

@@ -45,13 +45,16 @@
                             Записаться на олимпиады
                         </a>
                         <a href="{{ url_for('edit_profile') }}" class="btn btn-info mt-2 rounded-pill shadow-sm">Редактировать профиль</a>
+                        <a href="{{ url_for('generate_certificate') }}" class="btn btn-warning mt-2 rounded-pill shadow-sm">
+                            Создать сертификат участника
+                        </a>
                         <a href="javascript:history.back()" class="btn btn-light mt-2 rounded-pill shadow-sm">Назад</a>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Правая колонка -->
+
+        <!-- Правая колонка с олимпиадами -->
         <div class="col-md-6">
             <!-- Карточка с олимпиадами -->
             <div class="card shadow-lg mb-4" style="border-radius: 15px;">
@@ -63,6 +66,7 @@
                                 <li class="list-group-item">
                                     <strong>{{ reg.olympiad.name }}</strong> <br>
                                     Дата: {{ reg.olympiad.date.strftime('%d.%m.%Y') }}
+                                    <a href="{{ url_for('generate_certificate') }}" class="btn btn-sm btn-info mt-2">Создать сертификат</a>
                                 </li>
                             {% endfor %}
                         {% else %}
@@ -92,13 +96,12 @@
                                 {% endif %}
                             {% endfor %}
                         {% else %}
-                            <!-- Если нет доступных предметов с демо-версиями -->
                             <li class="list-group-item text-center">Нет доступных предметов для демо-версий.</li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 </div>
 
@@ -109,8 +112,8 @@
         color: #fff;
     }
     .profile-image img {
-        width: 150px;
-        height: 150px;
+        width: 300px;
+        height: 300px;
         object-fit: cover;
     }
     .profile-info {
@@ -125,6 +128,9 @@
     .btn:hover {
         transform: scale(1.05);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .card-body {
+        padding: 30px;
     }
 </style>
 {% endblock %}
