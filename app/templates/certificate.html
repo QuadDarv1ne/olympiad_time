@@ -5,98 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сертификат участника</title>
     <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #28a745;
+            --text-color: #333;
+            --bg-color: #f4f4f4;
+            --btn-radius: 5px;
+            --font-family: 'Arial', sans-serif;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: var(--font-family);
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: var(--bg-color);
         }
+
         .certificate-container {
             max-width: 800px;
             margin: 50px auto;
-            border: 10px solid #007bff;
+            border: 10px solid var(--primary-color);
             border-radius: 20px;
             background: #ffffff;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         .certificate-header img {
             width: 120px;
             margin-bottom: 20px;
         }
+
         .certificate-header h1 {
-            color: #007bff;
+            color: var(--primary-color);
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
+
         .certificate-content h2 {
             font-size: 2rem;
-            color: #333;
+            color: var(--text-color);
             margin: 20px 0;
         }
+
         .certificate-content p {
             font-size: 1.2rem;
             color: #555;
             margin-bottom: 10px;
         }
+
         .actions {
             margin-top: 30px;
             display: flex;
             justify-content: center;
             gap: 20px;
         }
+
         .actions .btn {
             padding: 12px 24px;
             font-size: 1rem;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: var(--btn-radius);
             color: white;
             text-align: center;
             transition: background 0.3s ease;
         }
+
         .btn-print {
-            background: #007bff;
+            background: var(--primary-color);
         }
+
         .btn-print:hover {
             background: #0056b3;
         }
+
         .btn-download {
-            background: #28a745;
+            background: var(--secondary-color);
         }
+
         .btn-download:hover {
             background: #218838;
         }
+
         @media print {
             .certificate-container {
                 box-shadow: none;
                 border: none;
                 padding: 20px;
             }
+
             .actions {
                 display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .certificate-container {
+                padding: 20px;
+            }
+
+            .certificate-header h1 {
+                font-size: 2rem;
+            }
+
+            .certificate-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .certificate-content p {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="certificate-container">
-        <div class="certificate-header">
-            <img src="/static/images/logo.png" alt="Логотип">
+        <section class="certificate-header">
+            <img src="/static/images/logo.png" alt="Логотип мероприятия" aria-label="Логотип сертификата">
             <h1>Сертификат участника</h1>
-        </div>
-        <div class="certificate-content">
+        </section>
+
+        <section class="certificate-content">
             <p>Настоящим подтверждается, что</p>
             <h2>{{ student_name }}</h2>
             <p>принял(а) участие в мероприятии</p>
             <p><strong>{{ event_name }}</strong></p>
             <p>Дата проведения: {{ event_date }}</p>
-        </div>
-        <div class="actions">
-            <a href="{{ url_for('download_certificate') }}" class="btn btn-download">Скачать PDF</a>
-            <a href="{{ url_for('download_certificate_word') }}" class="btn btn-download">Скачать Word</a>
-            <button onclick="window.print()" class="btn btn-print">Печать</button>
-        </div>
+        </section>
+
+        <section class="actions">
+            <a href="{{ url_for('download_certificate') }}" class="btn btn-download" aria-label="Скачать сертификат в формате PDF">Скачать PDF</a>
+            <a href="{{ url_for('download_certificate_word') }}" class="btn btn-download" aria-label="Скачать сертификат в формате Word">Скачать Word</a>
+            <button onclick="window.print()" class="btn btn-print" aria-label="Печать сертификата">Печать</button>
+        </section>
     </div>
 </body>
 </html>
