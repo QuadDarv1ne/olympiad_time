@@ -15,3 +15,6 @@ daphne
 hypercorn
 uvicorn
 gunicorn
+weasyprint
+python-docx
+reportlab
