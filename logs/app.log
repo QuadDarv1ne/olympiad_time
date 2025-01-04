@@ -114,3 +114,4 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'forgot
 2025-01-04 15:33:38,189 - INFO - Logging is set up.
 2025-01-04 15:35:29,366 - INFO - Logging is set up.
 2025-01-04 16:29:17,793 - INFO - Logging is set up.
+2025-01-04 16:29:35,018 - INFO - Logging is set up.
