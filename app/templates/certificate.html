@@ -6,12 +6,12 @@
     <title>Сертификат участника</title>
     <style>
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #28a745;
+            --primary-color: #1E88E5;
+            --accent-color: #FFA726;
             --text-color: #333;
-            --bg-color: #f4f4f4;
-            --btn-radius: 5px;
-            --font-family: 'Arial', sans-serif;
+            --bg-color: #F3F4F6;
+            --btn-radius: 8px;
+            --font-family: 'Roboto', sans-serif;
         }
 
         body {
@@ -19,44 +19,71 @@
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .certificate-container {
-            max-width: 800px;
-            margin: 50px auto;
-            border: 10px solid var(--primary-color);
-            border-radius: 20px;
-            background: #ffffff;
+            width: 100%;
+            max-width: 900px;
+            background: #fff;
+            border: 8px solid var(--primary-color);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
+        .certificate-header {
+            margin-bottom: 20px;
+        }
+
         .certificate-header img {
-            width: 120px;
+            width: 100px;
             margin-bottom: 20px;
         }
 
         .certificate-header h1 {
             color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin: 0;
         }
 
-        .certificate-content h2 {
-            font-size: 2rem;
-            color: var(--text-color);
+        .certificate-content {
             margin: 20px 0;
         }
 
         .certificate-content p {
             font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 10px;
+            color: var(--text-color);
+            margin: 10px 0;
+        }
+
+        .certificate-content h2 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .certificate-content strong {
+            color: var(--primary-color);
+        }
+
+        .certificate-image img {
+            width: 100%; /* Уменьшаем изображение до 80% от ширины контейнера */
+            max-width: 800px; /* Ограничиваем максимальную ширину изображения */
+            height: auto; /* Сохраняем пропорции */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .actions {
-            margin-top: 30px;
+            margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -77,15 +104,24 @@
         }
 
         .btn-print:hover {
-            background: #0056b3;
+            background: #1565C0;
         }
 
         .btn-download {
-            background: var(--secondary-color);
+            background: var(--accent-color);
         }
 
         .btn-download:hover {
-            background: #218838;
+            background: #FB8C00;
+        }
+
+        .format-select {
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: var(--btn-radius);
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
         }
 
         @media print {
@@ -121,27 +157,40 @@
 </head>
 <body>
     <div class="certificate-container">
-        <!-- Заголовок сертификата -->
-        <section class="certificate-header">
-            <img src="/static/images/logo.png" alt="Логотип мероприятия" aria-label="Логотип сертификата">
-            <h1>Сертификат участника</h1>
-        </section>
-
-        <!-- Основное содержание сертификата -->
-        <section class="certificate-content">
-            <p>Настоящим подтверждается, что</p>
-            <h2>{{ student_name }}</h2>
-            <p>принял(а) участие в мероприятии</p>
-            <p><strong>{{ event_name }}</strong></p>
-            <p>Дата проведения: {{ event_date }}</p>
+        <!-- Изображение сгенерированного сертификата -->
+        <section class="certificate-image">
+            <img src="/static/images/certificate_completed.png" alt="Сертификат" aria-label="Сертификат участника">
         </section>
 
         <!-- Действия -->
         <section class="actions">
-            <a href="{{ url_for('download_certificate') }}" class="btn btn-download" aria-label="Скачать сертификат в формате PDF">Скачать PDF</a>
             <a href="{{ url_for('download_certificate_word') }}" class="btn btn-download" aria-label="Скачать сертификат в формате Word">Скачать Word</a>
+            <a href="{{ url_for('download_certificate') }}" class="btn btn-download" aria-label="Скачать сертификат в формате PDF">Скачать PDF</a>
+            
+            <!-- Выпадающий список для выбора формата -->
+            <select class="format-select" onchange="downloadCertificate(this.value)">
+                <option value="">Выберите формат</option>
+                <option value="png">Скачать PNG</option>
+                <option value="jpg">Скачать JPG</option>
+                <option value="bmp">Скачать BMP</option>
+            </select>
+
             <button onclick="window.print()" class="btn btn-print" aria-label="Печать сертификата">Печать</button>
         </section>
     </div>
+
+    <script>
+        // Функция для скачивания сертификата в выбранном формате
+        function downloadCertificate(format) {
+            if (format) {
+                // Указываем путь к изображению сертификата
+                const imagePath = "/static/images/certificate_completed.png";
+                const downloadLink = document.createElement("a");
+                downloadLink.href = imagePath;
+                downloadLink.download = `certificate_completed.${format}`; // Устанавливаем имя файла с расширением
+                downloadLink.click();
+            }
+        }
+    </script>
 </body>
 </html>

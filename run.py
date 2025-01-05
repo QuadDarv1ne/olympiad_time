@@ -1,7 +1,11 @@
 import os
+import shutil
 from app import create_app
 import logging
 from logging.handlers import RotatingFileHandler
+
+# Определяем BASE_DIR как корневую директорию проекта
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Определяем конфигурацию на основе переменной окружения
 config_name = os.getenv('FLASK_CONFIG', 'development')
@@ -22,6 +26,20 @@ def setup_logging():
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Application startup')
+
+# Функция для удаления __pycache__ в директории проекта
+def remove_pycache(directory):
+    for root, dirs, files in os.walk(directory):
+        if '__pycache__' in dirs:
+            pycache_path = os.path.join(root, '__pycache__')
+            try:
+                shutil.rmtree(pycache_path)
+                print(f"Удалена папка {pycache_path}")
+            except Exception as e:
+                print(f"Не удалось удалить папку {pycache_path}: {e}")
+
+# Удаляем __pycache__ в проекте перед запуском приложения
+remove_pycache(BASE_DIR)
 
 # Запуск приложения
 if __name__ == "__main__":

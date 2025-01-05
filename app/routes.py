@@ -1,10 +1,11 @@
 import os
 import json
 import io
+from io import BytesIO
 from datetime import datetime
 from flask import (
     render_template, redirect, url_for, flash, request, jsonify,
-    current_app, Flask, send_file, make_response, abort
+    current_app, Flask, send_file, make_response, abort, session
 )
 from werkzeug.utils import secure_filename
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, OlympiadRegistrationForm
@@ -14,9 +15,25 @@ from app.db.models import (
 )
 from app.db.database import db
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_sqlalchemy import SQLAlchemy
 from docx import Document
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+
+from app.db.utils import generate_certificate_full
+
+app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Для использования сессий
+
+# Путь к базе данных внутри папки instance
+current_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(current_dir, 'instance', 'olympiad_time.db')
+
+# Настройка базы данных
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 
 # Проверка разрешённых форматов файлов
 def allowed_file(filename):
@@ -155,76 +172,122 @@ def init_routes(app):
                     current_user.photo = unique_filename
 
             db.session.commit()
-            flash('Профиль успешно обновлен!', 'success')
+            flash('Профиль успешно обновлен :D', 'success')
             return redirect(url_for('profile', student_id=current_user.id))
 
         return render_template('edit_profile.html', form=form, student=current_user)
 
 
-    @app.route('/generate_certificate')
+    # Основной маршрут для генерации сертификата
+    @app.route('/generate_certificate', methods=['GET', 'POST'])
     def generate_certificate():
-        student = {"student_name": "Иван", "student_surname": "Иванов"}
-        olympiad_name = "Математическая олимпиада"
-        date = datetime.now().strftime('%d.%m.%Y')
-        return render_template('certificate.html', student=student, olympiad_name=olympiad_name, date=date)
+        """
+        Основной маршрут для генерации сертификата.
+        Получает данные через форму или использует статичные значения для теста.
+        """
+        if request.method == 'POST':
+            student_name = request.form['student_name']
+            event_name = request.form['event_name']
+            event_date = request.form['event_date']
+            issuer_name = request.form['issuer_name']
+            director_name = request.form['director_name']
+            director_position = request.form['director_position']
+            methodist_name = request.form['methodist_name']
+            methodist_position = request.form['methodist_position']
+        else:
+            # Статичные значения для теста
+            student_name = "Иванову Ивану Ивановичу"
+            event_name = "За участие в олимпиаде по математике"
+            event_date = "Дата: 22 августа 2021 года"
+            issuer_name = "Организация: ОАО \"Наука\""
+            director_name = "Дуплей М. И."
+            director_position = "Руководитель"
+            methodist_name = "Егорова К. П."
+            methodist_position = "Главный методист"
+
+        # Сохраняем данные в сессии
+        session.update({
+            'student_name': student_name,
+            'event_name': event_name,
+            'event_date': event_date,
+            'issuer_name': issuer_name,
+            'director_name': director_name,
+            'director_position': director_position,
+            'methodist_name': methodist_name,
+            'methodist_position': methodist_position
+        })
+
+        # Генерация сертификата
+        certificate_path = generate_certificate_full(
+            student_name, event_name, event_date, issuer_name,
+            director_name, director_position, methodist_name, methodist_position
+        )
+
+        if certificate_path:
+            return render_template('certificate.html', **session)
+
+        return "Ошибка при генерации сертификата", 500
 
 
     @app.route('/certificate')
     def certificate():
-        # Передача данных в шаблон
-        student_name = "Иван Иванов"
-        event_name = "Конференция по Python"
-        event_date = "10 января 2025 года"
-        return render_template(
-            'certificate.html',
-            student_name=student_name,
-            event_name=event_name,
-            event_date=event_date
-        )
+        """
+        Страница для просмотра сертификата.
+        Получает данные из сессии и передает их в шаблон для отображения.
+        """
+        return render_template('certificate.html', **session)
 
 
     @app.route('/download_certificate')
     def download_certificate():
-        pdf_buffer = io.BytesIO()
-        c = canvas.Canvas(pdf_buffer, pagesize=letter)
-        c.setFont("Helvetica", 12)
-
-        c.drawString(100, 750, "Сертификат участника")
-        c.drawString(100, 730, "Настоящим подтверждается, что Иван Иванов")
-        c.drawString(100, 710, "принял(а) участие в мероприятии 'Математическая олимпиада'")
-        c.drawString(100, 690, "Дата проведения: 10 января 2025 года")
-
-        c.showPage()
-        c.save()
-
-        pdf_buffer.seek(0)
-        response = make_response(pdf_buffer.read())
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = 'attachment; filename=certificate.pdf'
-        return response
+        """
+        Маршрут для скачивания сертификата в формате PDF.
+        Генерирует сертификат с данными из сессии и возвращает файл для скачивания.
+        """
+        pdf_buffer = generate_certificate_full(
+            session['student_name'], session['event_name'], session['event_date'],
+            session['issuer_name'], session['director_name'], session['director_position'],
+            session['methodist_name'], session['methodist_position'], format_type="pdf"
+        )
+        if pdf_buffer:
+            return send_file(pdf_buffer, as_attachment=True, download_name="certificate.pdf", mimetype='application/pdf')
+        return "Ошибка при генерации сертификата", 500
 
 
     @app.route('/download_certificate_word')
     def download_certificate_word():
-        doc = Document()
-        doc.add_heading('Сертификат участника', level=1)
-        doc.add_paragraph('Настоящим подтверждается, что Иван Иванов')
-        doc.add_paragraph('принял(а) участие в мероприятии "Математическая олимпиада".')
-        doc.add_paragraph('Дата проведения: 10 января 2025 года')
-        doc.add_paragraph('\nРуководитель проекта\n\n___________________')
+        """
+        Маршрут для скачивания сертификата в формате Word.
+        Генерирует сертификат с данными из сессии и возвращает файл для скачивания.
+        """
+        word_buffer = generate_certificate_full(
+            session['student_name'], session['event_name'], session['event_date'],
+            session['issuer_name'], session['director_name'], session['director_position'],
+            session['methodist_name'], session['methodist_position'], format_type="docx"
+        )
+        if word_buffer:
+            return send_file(word_buffer, as_attachment=True, download_name="certificate.docx", mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        return "Ошибка при генерации сертификата", 500
 
-        buffer = io.BytesIO()
-        doc.save(buffer)
-        buffer.seek(0)
 
-        return send_file(
-            buffer,
-            as_attachment=True,
-            download_name="certificate.docx",
-            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    @app.route('/download_certificate_image')
+    def download_certificate_image():
+        """
+        Маршрут для скачивания сертификата в формате PNG.
+        Генерирует сертификат с данными из сессии и возвращает изображение для скачивания.
+        """
+        certificate_path = generate_certificate_full(
+            session['student_name'], session['event_name'], session['event_date'],
+            session['issuer_name'], session['director_name'], session['director_position'],
+            session['methodist_name'], session['methodist_position'], format_type="png"
         )
 
+        if certificate_path:
+            return send_file(certificate_path, as_attachment=True, download_name="certificate_completed.png", mimetype='image/png')
 
+        return "Ошибка при генерации сертификата", 500
+
+    
     @app.route('/forgot_password', methods=['GET', 'POST'])
     def forgot_password():
         return render_template('forgot_password.html')
