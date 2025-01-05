@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 import io
@@ -198,7 +199,7 @@ def init_routes(app):
             # Статичные значения для теста
             student_name = "Иванову Ивану Ивановичу"
             event_name = "За участие в олимпиаде по математике"
-            event_date = "Дата: 22 августа 2021 года"
+            event_date = "Дата: 08 августа 2024 года"
             issuer_name = "Организация: ОАО \"Наука\""
             director_name = "Дуплей М. И."
             director_position = "Руководитель"
@@ -270,22 +271,45 @@ def init_routes(app):
         return "Ошибка при генерации сертификата", 500
 
 
+    # Маршрут для скачивания сертификата
     @app.route('/download_certificate_image')
     def download_certificate_image():
         """
-        Маршрут для скачивания сертификата в формате PNG.
+        Маршрут для скачивания сертификата в выбранном формате (PNG, JPG, BMP).
         Генерирует сертификат с данными из сессии и возвращает изображение для скачивания.
         """
-        certificate_path = generate_certificate_full(
-            session['student_name'], session['event_name'], session['event_date'],
-            session['issuer_name'], session['director_name'], session['director_position'],
-            session['methodist_name'], session['methodist_position'], format_type="png"
-        )
+        format_type = request.args.get('format', 'png').lower()
+        logging.debug(f"Requested format: {format_type}")
+        
+        try:
+            # Генерация сертификата
+            certificate_path = generate_certificate_full(
+                session.get('student_name', 'Иван Иванов'),
+                session.get('event_name', 'Олимпиада'),
+                session.get('event_date', '2025-01-01'),
+                session.get('issuer_name', 'Оргкомитет'),
+                session.get('director_name', 'Директор'),
+                session.get('director_position', 'Должность директора'),
+                session.get('methodist_name', 'Методист'),
+                session.get('methodist_position', 'Должность методиста'),
+                format_type=format_type
+            )
+            
+            mimetype = {
+                "png": "image/png",
+                "jpg": "image/jpeg",
+                "bmp": "image/bmp"
+            }.get(format_type, "image/png")
 
-        if certificate_path:
-            return send_file(certificate_path, as_attachment=True, download_name="certificate_completed.png", mimetype='image/png')
-
-        return "Ошибка при генерации сертификата", 500
+            return send_file(
+                certificate_path,
+                as_attachment=True,
+                download_name=f"certificate_completed.{format_type}",
+                mimetype=mimetype
+            )
+        except Exception as e:
+            logging.error(f"Error generating certificate: {e}")
+            return jsonify({"error": str(e)}), 500
 
     
     @app.route('/forgot_password', methods=['GET', 'POST'])

@@ -92,12 +92,14 @@ olympiad_time/
 ```
 
 ### Создание базы данных
+
 ```cmd
 python .\create_db.py
 python .\populate_db.py
 ```
 
 ### Запуск проекта
+
 ```cmd
 python run.py
 или
@@ -105,10 +107,15 @@ flask run
 ```
 
 ### Работа с проектом
+
 ```cmd
 git init
 git push origin master
 ```
+
+### Генерация сертификата
+
+![sample_certificate](sample_certificate.png)
 
 ### 📄 Лицензия
 

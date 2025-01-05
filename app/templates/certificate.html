@@ -183,14 +183,13 @@
         // Функция для скачивания сертификата в выбранном формате
         function downloadCertificate(format) {
             if (format) {
-                // Указываем путь к изображению сертификата
-                const imagePath = "/static/images/certificate_completed.png";
+                // Указываем путь к серверному маршруту с параметром для формата
                 const downloadLink = document.createElement("a");
-                downloadLink.href = imagePath;
+                downloadLink.href = `/download_certificate_image?format=${format}`; // Параметр 'format' в URL
                 downloadLink.download = `certificate_completed.${format}`; // Устанавливаем имя файла с расширением
                 downloadLink.click();
             }
         }
-    </script>
+    </script>    
 </body>
 </html>

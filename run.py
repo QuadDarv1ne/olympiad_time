@@ -6,6 +6,8 @@ from logging.handlers import RotatingFileHandler
 
 # Определяем BASE_DIR как корневую директорию проекта
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+TEMP_DIR = os.path.join(BASE_DIR, 'temp')
 
 # Определяем конфигурацию на основе переменной окружения
 config_name = os.getenv('FLASK_CONFIG', 'development')
@@ -15,9 +17,9 @@ app = create_app(config_name)
 
 # Функция для настройки логирования
 def setup_logging():
-    if not os.path.exists('logs'):
-        os.mkdir('logs')  # Создаем директорию для логов, если она не существует
-    file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240, backupCount=10)
+    if not os.path.exists(LOG_DIR):
+        os.mkdir(LOG_DIR)  # Создаем директорию для логов, если она не существует
+    file_handler = RotatingFileHandler(os.path.join(LOG_DIR, 'app.log'), maxBytes=10240, backupCount=10)
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
     ))
@@ -26,6 +28,17 @@ def setup_logging():
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Application startup')
+
+# Функция для удаления временных файлов
+def remove_temp_files(directory):
+    if os.path.exists(directory):
+        try:
+            shutil.rmtree(directory)
+            print(f"Удалена временная директория: {directory}")
+        except Exception as e:
+            print(f"Не удалось удалить временные файлы из {directory}: {e}")
+    else:
+        print(f"Временная директория {directory} не существует.")
 
 # Функция для удаления __pycache__ в директории проекта
 def remove_pycache(directory):
@@ -38,8 +51,26 @@ def remove_pycache(directory):
             except Exception as e:
                 print(f"Не удалось удалить папку {pycache_path}: {e}")
 
-# Удаляем __pycache__ в проекте перед запуском приложения
+# Удаляем __pycache__, временные файлы и старые логи перед запуском приложения
 remove_pycache(BASE_DIR)
+remove_temp_files(TEMP_DIR)
+
+# Удаление старых логов (кроме последних 10 файлов)
+def remove_old_logs(log_directory, keep_count=10):
+    if os.path.exists(log_directory):
+        log_files = sorted(
+            [os.path.join(log_directory, f) for f in os.listdir(log_directory) if os.path.isfile(os.path.join(log_directory, f))],
+            key=os.path.getmtime
+        )
+        if len(log_files) > keep_count:
+            for log_file in log_files[:-keep_count]:
+                try:
+                    os.remove(log_file)
+                    print(f"Удален старый лог: {log_file}")
+                except Exception as e:
+                    print(f"Не удалось удалить лог {log_file}: {e}")
+
+remove_old_logs(LOG_DIR)
 
 # Запуск приложения
 if __name__ == "__main__":
